@@ -1,0 +1,3096 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_5c693b93a7eb446661965ab1c3c5d195 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    <h3 align="center" style="font-size:20px"><b>India pH Map - 2018</b></h3>
+    
+    <div style="position: fixed; bottom: 50px; left: 50px; z-index: 1000; background: white;
+                border:2px solid gray; border-radius:5px; padding: 10px; font-size:13px;">
+        <h4 style="margin: 0 0 5px;">pH Categories</h4>
+        <div><i style="background:#FF0000;width:15px;height:15px;display:inline-block;"></i> ≤ 7.5 (Highly Acidic)</div>
+        <div><i style="background:#FFFF00;width:15px;height:15px;display:inline-block;"></i>7.5-7.9 (Moderately Acidic)</div>
+        <div><i style="background:#00FF00;width:15px;height:15px;display:inline-block;"></i> 8-8.3 (Acceptable)</div>
+        <div><i style="background:#00BFFF;width:15px;height:15px;display:inline-block;"></i> 8.4-8.6 (Moderately Alkaline)</div>
+        <div><i style="background:#8A2BE2;width:15px;height:15px;display:inline-block;"></i> ≥ 8.6 (Highly Alkaline)</div>
+        <hr style="margin: 5px 0;">
+        <b>Line Colors:</b> Cluster Avg pH<br>
+        <b>Dot Colors:</b> Station pH
+    </div>
+    
+    
+            <div class="folium-map" id="map_5c693b93a7eb446661965ab1c3c5d195" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_5c693b93a7eb446661965ab1c3c5d195 = L.map(
+                "map_5c693b93a7eb446661965ab1c3c5d195",
+                {
+                    center: [22.5, 79.5],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 5.4,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_d6ab096366faad4a176457eb26c64c5b = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_d6ab096366faad4a176457eb26c64c5b.addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            var tile_layer_d585f244d8c8e5af97744b9ecdac17d3 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_d585f244d8c8e5af97744b9ecdac17d3.addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            var tile_layer_2782a344deb687a2c3ac90c99f3fd95b = L.tileLayer(
+                "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Map tiles by Stamen Design, CC BY 3.0 \u2014 Map data \u00a9 OpenStreetMap contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_2782a344deb687a2c3ac90c99f3fd95b.addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            var marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47 = L.markerClusterGroup(
+                {
+  "disableClusteringAtZoom": 7,
+}
+            );
+        
+    
+            var circle_marker_44d42b14fa4084ca63b94e9627282b9c = L.circleMarker(
+                [17.042624, 82.166873],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_e5ce2cb310d9ad64d764449bf9956304 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4a100331014ae335796a8c3cf4df4e64 = $(`<div id="html_4a100331014ae335796a8c3cf4df4e64" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2354<br>             <b>State:</b> ANDHRA PRADESH<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.52<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_e5ce2cb310d9ad64d764449bf9956304.setContent(html_4a100331014ae335796a8c3cf4df4e64);
+            
+        
+
+        circle_marker_44d42b14fa4084ca63b94e9627282b9c.bindPopup(popup_e5ce2cb310d9ad64d764449bf9956304)
+        ;
+
+        
+    
+    
+            var circle_marker_d16b1b1a9b9172e8734919e929b0cbd5 = L.circleMarker(
+                [16.854914, 82.231328],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_58cdea19b01ca9bcf7db5c2d303b7108 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9546c7a3ead31c0c1435412782db1569 = $(`<div id="html_9546c7a3ead31c0c1435412782db1569" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2355<br>             <b>State:</b> ANDHRA PRADESH<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.18<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_58cdea19b01ca9bcf7db5c2d303b7108.setContent(html_9546c7a3ead31c0c1435412782db1569);
+            
+        
+
+        circle_marker_d16b1b1a9b9172e8734919e929b0cbd5.bindPopup(popup_58cdea19b01ca9bcf7db5c2d303b7108)
+        ;
+
+        
+    
+    
+            var circle_marker_6f5f6930ecab40fda4c7ed342b41c597 = L.circleMarker(
+                [16.518542, 80.77469],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_2fd7511920d8049b1344e84a040035b0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5c37cdd57ce4ce0d17432ec5c87986ee = $(`<div id="html_5c37cdd57ce4ce0d17432ec5c87986ee" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3051<br>             <b>State:</b> ANDHRA PRADESH<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.40<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_2fd7511920d8049b1344e84a040035b0.setContent(html_5c37cdd57ce4ce0d17432ec5c87986ee);
+            
+        
+
+        circle_marker_6f5f6930ecab40fda4c7ed342b41c597.bindPopup(popup_2fd7511920d8049b1344e84a040035b0)
+        ;
+
+        
+    
+    
+            var circle_marker_e8cb29ecc4b55afbdf549b2c5a3e918b = L.circleMarker(
+                [28.72121, 77.139675],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_ee59aedcc4942bea62790a3c986615ba = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0d16199f2fa5c7cfe5c3c4e93cd514c1 = $(`<div id="html_0d16199f2fa5c7cfe5c3c4e93cd514c1" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1479<br>             <b>State:</b> DELHI<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.60<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_ee59aedcc4942bea62790a3c986615ba.setContent(html_0d16199f2fa5c7cfe5c3c4e93cd514c1);
+            
+        
+
+        circle_marker_e8cb29ecc4b55afbdf549b2c5a3e918b.bindPopup(popup_ee59aedcc4942bea62790a3c986615ba)
+        ;
+
+        
+    
+    
+            var circle_marker_1b1fe8cf61903b62d06c70a8ad0fa699 = L.circleMarker(
+                [28.546369, 77.312597],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_720ae6d8c61440f41fe79db75d5b30b4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3b90d2023d9a58dcffae00ff176d4102 = $(`<div id="html_3b90d2023d9a58dcffae00ff176d4102" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2057<br>             <b>State:</b> DELHI<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_720ae6d8c61440f41fe79db75d5b30b4.setContent(html_3b90d2023d9a58dcffae00ff176d4102);
+            
+        
+
+        circle_marker_1b1fe8cf61903b62d06c70a8ad0fa699.bindPopup(popup_720ae6d8c61440f41fe79db75d5b30b4)
+        ;
+
+        
+    
+    
+            var circle_marker_8027b293b1956b886c9e4645b078dbbc = L.circleMarker(
+                [15.182391, 73.990575],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_180d00a736506cb7b2f6bc713047c1e1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4f4938bedcb033b97299b7625afc8253 = $(`<div id="html_4f4938bedcb033b97299b7625afc8253" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2265<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.44<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_180d00a736506cb7b2f6bc713047c1e1.setContent(html_4f4938bedcb033b97299b7625afc8253);
+            
+        
+
+        circle_marker_8027b293b1956b886c9e4645b078dbbc.bindPopup(popup_180d00a736506cb7b2f6bc713047c1e1)
+        ;
+
+        
+    
+    
+            var circle_marker_8306f526e7d4819832bb18a2a9c944ca = L.circleMarker(
+                [15.16806, 74.010058],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_caaa24cd0a81a239c8d3fd004cc48fa4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d9612694f510a8ce6a6a37491dd10e54 = $(`<div id="html_d9612694f510a8ce6a6a37491dd10e54" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2266<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.49<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_caaa24cd0a81a239c8d3fd004cc48fa4.setContent(html_d9612694f510a8ce6a6a37491dd10e54);
+            
+        
+
+        circle_marker_8306f526e7d4819832bb18a2a9c944ca.bindPopup(popup_caaa24cd0a81a239c8d3fd004cc48fa4)
+        ;
+
+        
+    
+    
+            var circle_marker_94f71ccaca493d1b80a8f696b4ec1845 = L.circleMarker(
+                [15.502818, 73.949118],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_4112b1c1e7426cc229d87e99c66e85f4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_06ca25c15b7e079d1f79bd1b90fc2077 = $(`<div id="html_06ca25c15b7e079d1f79bd1b90fc2077" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2268<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.35<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_4112b1c1e7426cc229d87e99c66e85f4.setContent(html_06ca25c15b7e079d1f79bd1b90fc2077);
+            
+        
+
+        circle_marker_94f71ccaca493d1b80a8f696b4ec1845.bindPopup(popup_4112b1c1e7426cc229d87e99c66e85f4)
+        ;
+
+        
+    
+    
+            var circle_marker_ba2a36e47322d6640e9d8b9cb442b14e = L.circleMarker(
+                [23.134936, 72.611525],
+                {"bubblingMouseEvents": true, "color": "#8A2BE2", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8A2BE2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_41d143d1dc2cfd504b5a0ef67ffbc9f6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3511641a4cfd9dfd461ce79351ca4c2e = $(`<div id="html_3511641a4cfd9dfd461ce79351ca4c2e" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2073<br>             <b>State:</b> GUJARAT<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.74<br>             <b>Category:</b> Highly Alkaline         </div>         </div>`)[0];
+                popup_41d143d1dc2cfd504b5a0ef67ffbc9f6.setContent(html_3511641a4cfd9dfd461ce79351ca4c2e);
+            
+        
+
+        circle_marker_ba2a36e47322d6640e9d8b9cb442b14e.bindPopup(popup_41d143d1dc2cfd504b5a0ef67ffbc9f6)
+        ;
+
+        
+    
+    
+            var circle_marker_1285a1f5ee727439f7ed10c04a55b06d = L.circleMarker(
+                [21.589419, 72.975333],
+                {"bubblingMouseEvents": true, "color": "#8A2BE2", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8A2BE2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_b9719447ba3d661fa29481e46a382f03 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f73e08859c9b3c0729302ccdcc24f8e9 = $(`<div id="html_f73e08859c9b3c0729302ccdcc24f8e9" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2074<br>             <b>State:</b> GUJARAT<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 9.40<br>             <b>Category:</b> Highly Alkaline         </div>         </div>`)[0];
+                popup_b9719447ba3d661fa29481e46a382f03.setContent(html_f73e08859c9b3c0729302ccdcc24f8e9);
+            
+        
+
+        circle_marker_1285a1f5ee727439f7ed10c04a55b06d.bindPopup(popup_b9719447ba3d661fa29481e46a382f03)
+        ;
+
+        
+    
+    
+            var circle_marker_1ee968e144e734a64ecd709a0efa3570 = L.circleMarker(
+                [30.104731, 77.257543],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_558fd028bb6ce7b9aa21ef944a711d3e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ce7c6e0b00b2b20f7b118e3897146f7a = $(`<div id="html_ce7c6e0b00b2b20f7b118e3897146f7a" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1109<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_558fd028bb6ce7b9aa21ef944a711d3e.setContent(html_ce7c6e0b00b2b20f7b118e3897146f7a);
+            
+        
+
+        circle_marker_1ee968e144e734a64ecd709a0efa3570.bindPopup(popup_558fd028bb6ce7b9aa21ef944a711d3e)
+        ;
+
+        
+    
+    
+            var circle_marker_86e50526652ce49f44b8004926721d47 = L.circleMarker(
+                [29.840997, 77.09702],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_83c524495822bf0d06c80dcb7d4e7aba = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_036b88de9999f96bc8c7cf3589ece72b = $(`<div id="html_036b88de9999f96bc8c7cf3589ece72b" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1110<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.85<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_83c524495822bf0d06c80dcb7d4e7aba.setContent(html_036b88de9999f96bc8c7cf3589ece72b);
+            
+        
+
+        circle_marker_86e50526652ce49f44b8004926721d47.bindPopup(popup_83c524495822bf0d06c80dcb7d4e7aba)
+        ;
+
+        
+    
+    
+            var circle_marker_3fe1b4f1fae2f065fc168ffae6f17755 = L.circleMarker(
+                [29.041915, 76.142314],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_c9d24d4b63e487eafb3555ee1da1ed31 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_90627e95f2359d809d9f115e8c94e349 = $(`<div id="html_90627e95f2359d809d9f115e8c94e349" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1111<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.12<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_c9d24d4b63e487eafb3555ee1da1ed31.setContent(html_90627e95f2359d809d9f115e8c94e349);
+            
+        
+
+        circle_marker_3fe1b4f1fae2f065fc168ffae6f17755.bindPopup(popup_c9d24d4b63e487eafb3555ee1da1ed31)
+        ;
+
+        
+    
+    
+            var circle_marker_2b2a4fe8e9260be52432d3254e13ede8 = L.circleMarker(
+                [28.805764, 77.046769],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6b3b46d65f0fa58064bd5ea5a0981c6d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b5ce9259524b472f5114da7d46513b0c = $(`<div id="html_b5ce9259524b472f5114da7d46513b0c" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1112<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.13<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_6b3b46d65f0fa58064bd5ea5a0981c6d.setContent(html_b5ce9259524b472f5114da7d46513b0c);
+            
+        
+
+        circle_marker_2b2a4fe8e9260be52432d3254e13ede8.bindPopup(popup_6b3b46d65f0fa58064bd5ea5a0981c6d)
+        ;
+
+        
+    
+    
+            var circle_marker_ae3cef5509ba9f7c0a51ace79db6899a = L.circleMarker(
+                [29.686206, 76.957158],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_f2adc87b2dba5b0b2e46473f42796405 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f4fecc01182422cfb93dd53d6b091cf9 = $(`<div id="html_f4fecc01182422cfb93dd53d6b091cf9" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1113<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.81<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_f2adc87b2dba5b0b2e46473f42796405.setContent(html_f4fecc01182422cfb93dd53d6b091cf9);
+            
+        
+
+        circle_marker_ae3cef5509ba9f7c0a51ace79db6899a.bindPopup(popup_f2adc87b2dba5b0b2e46473f42796405)
+        ;
+
+        
+    
+    
+            var circle_marker_b9e6523a8f0a415ee8a6463286d95aaa = L.circleMarker(
+                [29.340559, 76.329749],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_515d89595afce55edf3a42332a5ed3e1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4f72cfcceb8fb4e873eeb57496cc74de = $(`<div id="html_4f72cfcceb8fb4e873eeb57496cc74de" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1114<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.19<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_515d89595afce55edf3a42332a5ed3e1.setContent(html_4f72cfcceb8fb4e873eeb57496cc74de);
+            
+        
+
+        circle_marker_b9e6523a8f0a415ee8a6463286d95aaa.bindPopup(popup_515d89595afce55edf3a42332a5ed3e1)
+        ;
+
+        
+    
+    
+            var circle_marker_4c4f443ce5a5c1c6900b16a4caea0507 = L.circleMarker(
+                [29.173241, 76.91024],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_a1b2d3ed519718bbfe13bf0e6ed78c04 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c8d8b7eceafdf64017b887f2339fa1af = $(`<div id="html_c8d8b7eceafdf64017b887f2339fa1af" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1115<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.12<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_a1b2d3ed519718bbfe13bf0e6ed78c04.setContent(html_c8d8b7eceafdf64017b887f2339fa1af);
+            
+        
+
+        circle_marker_4c4f443ce5a5c1c6900b16a4caea0507.bindPopup(popup_a1b2d3ed519718bbfe13bf0e6ed78c04)
+        ;
+
+        
+    
+    
+            var circle_marker_df31f4848bf752cf525ae4a8afdad575 = L.circleMarker(
+                [29.358769, 76.950469],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_452ffacbb6e5d83b3ded47f82e408227 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_428b8225c14c1d434af5e18652e61f76 = $(`<div id="html_428b8225c14c1d434af5e18652e61f76" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1116<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_452ffacbb6e5d83b3ded47f82e408227.setContent(html_428b8225c14c1d434af5e18652e61f76);
+            
+        
+
+        circle_marker_df31f4848bf752cf525ae4a8afdad575.bindPopup(popup_452ffacbb6e5d83b3ded47f82e408227)
+        ;
+
+        
+    
+    
+            var circle_marker_9eb2744e098518b4e44d836456c615b2 = L.circleMarker(
+                [28.506624, 77.314305],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_76de1a7535e49240f4780327ec449f0a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_29d2c02813a68424f8b81bde152c357b = $(`<div id="html_29d2c02813a68424f8b81bde152c357b" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1419<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.40<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_76de1a7535e49240f4780327ec449f0a.setContent(html_29d2c02813a68424f8b81bde152c357b);
+            
+        
+
+        circle_marker_9eb2744e098518b4e44d836456c615b2.bindPopup(popup_76de1a7535e49240f4780327ec449f0a)
+        ;
+
+        
+    
+    
+            var circle_marker_e9bc91a83b8022ae2b876760599c61b6 = L.circleMarker(
+                [30.296244, 77.562478],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_9e4a0377f1e2935a2008bb2bd0639da8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_54a408484cddef58e19af40fbf997127 = $(`<div id="html_54a408484cddef58e19af40fbf997127" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1886<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.15<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_9e4a0377f1e2935a2008bb2bd0639da8.setContent(html_54a408484cddef58e19af40fbf997127);
+            
+        
+
+        circle_marker_e9bc91a83b8022ae2b876760599c61b6.bindPopup(popup_9e4a0377f1e2935a2008bb2bd0639da8)
+        ;
+
+        
+    
+    
+            var circle_marker_db0708f312a26b430b17c05c27ae68ed = L.circleMarker(
+                [30.074141, 77.216343],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_4df093b4fd5a98644ecd8aaa65f0d52c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7a23f17e90689d06862c4183cc4751f8 = $(`<div id="html_7a23f17e90689d06862c4183cc4751f8" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2056<br>             <b>State:</b> HARYANA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.30<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_4df093b4fd5a98644ecd8aaa65f0d52c.setContent(html_7a23f17e90689d06862c4183cc4751f8);
+            
+        
+
+        circle_marker_db0708f312a26b430b17c05c27ae68ed.bindPopup(popup_4df093b4fd5a98644ecd8aaa65f0d52c)
+        ;
+
+        
+    
+    
+            var circle_marker_cdce259f3a19d6290e96f6a299c799c6 = L.circleMarker(
+                [11.335961, 75.761858],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_509c055a2dd8fc4306ce913a04e772e6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bbef1064204cf23dc678d29d88446429 = $(`<div id="html_bbef1064204cf23dc678d29d88446429" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3461<br>             <b>State:</b> KERALA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.50<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_509c055a2dd8fc4306ce913a04e772e6.setContent(html_bbef1064204cf23dc678d29d88446429);
+            
+        
+
+        circle_marker_cdce259f3a19d6290e96f6a299c799c6.bindPopup(popup_509c055a2dd8fc4306ce913a04e772e6)
+        ;
+
+        
+    
+    
+            var circle_marker_4d076efc63fc2b221ac8a7b79a9c33d4 = L.circleMarker(
+                [10.07305, 76.286714],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_4b7467927203f394fb7b19d8a22ae925 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d81410b65994691f315710ee630dad46 = $(`<div id="html_d81410b65994691f315710ee630dad46" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3467<br>             <b>State:</b> KERALA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.30<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_4b7467927203f394fb7b19d8a22ae925.setContent(html_d81410b65994691f315710ee630dad46);
+            
+        
+
+        circle_marker_4d076efc63fc2b221ac8a7b79a9c33d4.bindPopup(popup_4b7467927203f394fb7b19d8a22ae925)
+        ;
+
+        
+    
+    
+            var circle_marker_e361714c1dec3306e4896e7135888c5e = L.circleMarker(
+                [10.1108, 76.476031],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_d919522732dcce8cab400814d0fa62c6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_35e47a27bcb1c208a8ba46c9c6d3f895 = $(`<div id="html_35e47a27bcb1c208a8ba46c9c6d3f895" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3469<br>             <b>State:</b> KERALA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.20<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_d919522732dcce8cab400814d0fa62c6.setContent(html_35e47a27bcb1c208a8ba46c9c6d3f895);
+            
+        
+
+        circle_marker_e361714c1dec3306e4896e7135888c5e.bindPopup(popup_d919522732dcce8cab400814d0fa62c6)
+        ;
+
+        
+    
+    
+            var circle_marker_c5e390c15d3fbc525d947d69ebe54cd7 = L.circleMarker(
+                [24.245, 93.54079],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_ecdb84b25f8fcb5e129d04aad665203f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_297bec87da1740c700509d4126f26fa6 = $(`<div id="html_297bec87da1740c700509d4126f26fa6" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2836<br>             <b>State:</b> MANIPUR<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.60<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_ecdb84b25f8fcb5e129d04aad665203f.setContent(html_297bec87da1740c700509d4126f26fa6);
+            
+        
+
+        circle_marker_c5e390c15d3fbc525d947d69ebe54cd7.bindPopup(popup_ecdb84b25f8fcb5e129d04aad665203f)
+        ;
+
+        
+    
+    
+            var circle_marker_974d2d59a96db8302742ffb7a36450de = L.circleMarker(
+                [20.474944, 85.901762],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6cd574c7301d45fe3e71b8781ac35e1b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_09c09e31cec7e8ebfcc424597ea76579 = $(`<div id="html_09c09e31cec7e8ebfcc424597ea76579" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2428<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_6cd574c7301d45fe3e71b8781ac35e1b.setContent(html_09c09e31cec7e8ebfcc424597ea76579);
+            
+        
+
+        circle_marker_974d2d59a96db8302742ffb7a36450de.bindPopup(popup_6cd574c7301d45fe3e71b8781ac35e1b)
+        ;
+
+        
+    
+    
+            var circle_marker_dc2362aa39330e0c8c0c92c0a02119a5 = L.circleMarker(
+                [20.454888, 85.924125],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6c7e14839baa9e5f328dd3231a400773 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a8994c113d3b8b05856b7d51bb0ce151 = $(`<div id="html_a8994c113d3b8b05856b7d51bb0ce151" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2429<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.80<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_6c7e14839baa9e5f328dd3231a400773.setContent(html_a8994c113d3b8b05856b7d51bb0ce151);
+            
+        
+
+        circle_marker_dc2362aa39330e0c8c0c92c0a02119a5.bindPopup(popup_6c7e14839baa9e5f328dd3231a400773)
+        ;
+
+        
+    
+    
+            var circle_marker_6aa415a287f61b0c354bf1cca6324b2d = L.circleMarker(
+                [20.315874, 86.084897],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_837d7ef4a3bff96868256aa42aba235d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d69da63090926595bf042f9bbcc3eece = $(`<div id="html_d69da63090926595bf042f9bbcc3eece" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2430<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_837d7ef4a3bff96868256aa42aba235d.setContent(html_d69da63090926595bf042f9bbcc3eece);
+            
+        
+
+        circle_marker_6aa415a287f61b0c354bf1cca6324b2d.bindPopup(popup_837d7ef4a3bff96868256aa42aba235d)
+        ;
+
+        
+    
+    
+            var circle_marker_d50db9f92ba54d41ecfc55b74a891053 = L.circleMarker(
+                [20.315758, 86.085088],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_a37dfff165740cc8550f6379c914b5e1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_273ec84a7e108d6c02863cc820e9844b = $(`<div id="html_273ec84a7e108d6c02863cc820e9844b" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3950<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_a37dfff165740cc8550f6379c914b5e1.setContent(html_273ec84a7e108d6c02863cc820e9844b);
+            
+        
+
+        circle_marker_d50db9f92ba54d41ecfc55b74a891053.bindPopup(popup_a37dfff165740cc8550f6379c914b5e1)
+        ;
+
+        
+    
+    
+            var circle_marker_cd268aebb41f927fac2ca2f2f28b95bc = L.circleMarker(
+                [20.459583, 85.891508],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1e12bef5b981fc313fc4bd040d6f7bed = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_43655098ed659d4f6d27849e4fac94ca = $(`<div id="html_43655098ed659d4f6d27849e4fac94ca" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3951<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.80<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_1e12bef5b981fc313fc4bd040d6f7bed.setContent(html_43655098ed659d4f6d27849e4fac94ca);
+            
+        
+
+        circle_marker_cd268aebb41f927fac2ca2f2f28b95bc.bindPopup(popup_1e12bef5b981fc313fc4bd040d6f7bed)
+        ;
+
+        
+    
+    
+            var circle_marker_df09f305431e39017249440d6265e744 = L.circleMarker(
+                [20.424356, 85.963655],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_24aaeba816dd1f4ff2d1630bb3bbf765 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_2c18a2a766090ea7c3506899f3d43a38 = $(`<div id="html_2c18a2a766090ea7c3506899f3d43a38" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3952<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.70<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_24aaeba816dd1f4ff2d1630bb3bbf765.setContent(html_2c18a2a766090ea7c3506899f3d43a38);
+            
+        
+
+        circle_marker_df09f305431e39017249440d6265e744.bindPopup(popup_24aaeba816dd1f4ff2d1630bb3bbf765)
+        ;
+
+        
+    
+    
+            var circle_marker_f261ff53b176413546afb5c0e82e6968 = L.circleMarker(
+                [20.310958, 85.891764],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_58bf48d0fd67dfb1807c7a83c30be9d8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_dfc2b6048b073ddcb95f3ec6f0202aab = $(`<div id="html_dfc2b6048b073ddcb95f3ec6f0202aab" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3958<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.40<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_58bf48d0fd67dfb1807c7a83c30be9d8.setContent(html_dfc2b6048b073ddcb95f3ec6f0202aab);
+            
+        
+
+        circle_marker_f261ff53b176413546afb5c0e82e6968.bindPopup(popup_58bf48d0fd67dfb1807c7a83c30be9d8)
+        ;
+
+        
+    
+    
+            var circle_marker_9367e68962a3506d404746a053e4b8e5 = L.circleMarker(
+                [20.350009, 85.880072],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_aae18ee6a88ac50130a0e7a5b8dd1fd0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_318c9bb06f730414a8565fffd7617895 = $(`<div id="html_318c9bb06f730414a8565fffd7617895" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3959<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_aae18ee6a88ac50130a0e7a5b8dd1fd0.setContent(html_318c9bb06f730414a8565fffd7617895);
+            
+        
+
+        circle_marker_9367e68962a3506d404746a053e4b8e5.bindPopup(popup_aae18ee6a88ac50130a0e7a5b8dd1fd0)
+        ;
+
+        
+    
+    
+            var circle_marker_3961df858ecaa8c69afdfb42918a2818 = L.circleMarker(
+                [19.887419, 85.813792],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_ad65dc13dee540222c0637099d09045b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9564990b84341edaeb6e2a57abe6ae68 = $(`<div id="html_9564990b84341edaeb6e2a57abe6ae68" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3960<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.60<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_ad65dc13dee540222c0637099d09045b.setContent(html_9564990b84341edaeb6e2a57abe6ae68);
+            
+        
+
+        circle_marker_3961df858ecaa8c69afdfb42918a2818.bindPopup(popup_ad65dc13dee540222c0637099d09045b)
+        ;
+
+        
+    
+    
+            var circle_marker_1e8ca6cf1ecf15e82d0bb610e8deb208 = L.circleMarker(
+                [24.762569, 71.73495],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_ba49c5150bb9bfbd936b3b9eab9ca67c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7e91920777d5233a36724403470c95bf = $(`<div id="html_7e91920777d5233a36724403470c95bf" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2932<br>             <b>State:</b> RAJASTHAN<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.31<br>             <b>Category:</b> Out of Range         </div>         </div>`)[0];
+                popup_ba49c5150bb9bfbd936b3b9eab9ca67c.setContent(html_7e91920777d5233a36724403470c95bf);
+            
+        
+
+        circle_marker_1e8ca6cf1ecf15e82d0bb610e8deb208.bindPopup(popup_ba49c5150bb9bfbd936b3b9eab9ca67c)
+        ;
+
+        
+    
+    
+            var circle_marker_0682ef86231b589cbaa56ef71efa4756 = L.circleMarker(
+                [30.180856, 73.973639],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_7ef37afbafb2049c71ebd2e93579f7c5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6ab8de0c9e4e9c2440a0102b9c6d39d7 = $(`<div id="html_6ab8de0c9e4e9c2440a0102b9c6d39d7" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2933<br>             <b>State:</b> RAJASTHAN<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.02<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_7ef37afbafb2049c71ebd2e93579f7c5.setContent(html_6ab8de0c9e4e9c2440a0102b9c6d39d7);
+            
+        
+
+        circle_marker_0682ef86231b589cbaa56ef71efa4756.bindPopup(popup_7ef37afbafb2049c71ebd2e93579f7c5)
+        ;
+
+        
+    
+    
+            var circle_marker_f2c349d279e1cbeb14cbeb5b0fb6b951 = L.circleMarker(
+                [29.60093, 74.321796],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_670af5e86bfdf2655f7999d0ed034552 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_79289f1f448469ea87099daf2e4d1663 = $(`<div id="html_79289f1f448469ea87099daf2e4d1663" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2934<br>             <b>State:</b> RAJASTHAN<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_670af5e86bfdf2655f7999d0ed034552.setContent(html_79289f1f448469ea87099daf2e4d1663);
+            
+        
+
+        circle_marker_f2c349d279e1cbeb14cbeb5b0fb6b951.bindPopup(popup_670af5e86bfdf2655f7999d0ed034552)
+        ;
+
+        
+    
+    
+            var circle_marker_0d1d2929b2f8e6df88674c760ef78f7f = L.circleMarker(
+                [23.844592, 91.276394],
+                {"bubblingMouseEvents": true, "color": "#8A2BE2", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8A2BE2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_bff82fcde939a024034d8a68f034146e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_95be09440980d4d69d366753fb10cfc2 = $(`<div id="html_95be09440980d4d69d366753fb10cfc2" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1729<br>             <b>State:</b> TRIPURA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.99<br>             <b>Category:</b> Highly Alkaline         </div>         </div>`)[0];
+                popup_bff82fcde939a024034d8a68f034146e.setContent(html_95be09440980d4d69d366753fb10cfc2);
+            
+        
+
+        circle_marker_0d1d2929b2f8e6df88674c760ef78f7f.bindPopup(popup_bff82fcde939a024034d8a68f034146e)
+        ;
+
+        
+    
+    
+            var circle_marker_5f067bb8f6b3174f7235f9640f8bb45b = L.circleMarker(
+                [23.902792, 91.394906],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_a8c422944bb36a9fe8cb70910a22a56e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d5b0ee398ade207eeecf1dd67a91955b = $(`<div id="html_d5b0ee398ade207eeecf1dd67a91955b" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3387<br>             <b>State:</b> TRIPURA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.91<br>             <b>Category:</b> Out of Range         </div>         </div>`)[0];
+                popup_a8c422944bb36a9fe8cb70910a22a56e.setContent(html_d5b0ee398ade207eeecf1dd67a91955b);
+            
+        
+
+        circle_marker_5f067bb8f6b3174f7235f9640f8bb45b.bindPopup(popup_a8c422944bb36a9fe8cb70910a22a56e)
+        ;
+
+        
+    
+    
+            var circle_marker_98551a85593b1a3952fe3476d6ae6766 = L.circleMarker(
+                [23.510969, 91.437092],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_fb88b453a4d7f6f3f6a9ecbe6e898277 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a12fd457d1bb1603dbf2f6a2954b2177 = $(`<div id="html_a12fd457d1bb1603dbf2f6a2954b2177" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3388<br>             <b>State:</b> TRIPURA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.33<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_fb88b453a4d7f6f3f6a9ecbe6e898277.setContent(html_a12fd457d1bb1603dbf2f6a2954b2177);
+            
+        
+
+        circle_marker_98551a85593b1a3952fe3476d6ae6766.bindPopup(popup_fb88b453a4d7f6f3f6a9ecbe6e898277)
+        ;
+
+        
+    
+    
+            var circle_marker_14cd9ef8fc4db498a94ea796748ae526 = L.circleMarker(
+                [23.849131, 91.924411],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6b1013c93856ac87407ebfed4b73e8a0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bb36bf45d1b933f3cd6468543118dae3 = $(`<div id="html_bb36bf45d1b933f3cd6468543118dae3" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3389<br>             <b>State:</b> TRIPURA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.15<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_6b1013c93856ac87407ebfed4b73e8a0.setContent(html_bb36bf45d1b933f3cd6468543118dae3);
+            
+        
+
+        circle_marker_14cd9ef8fc4db498a94ea796748ae526.bindPopup(popup_6b1013c93856ac87407ebfed4b73e8a0)
+        ;
+
+        
+    
+    
+            var circle_marker_20d104b4b1135a0483a67ce021579105 = L.circleMarker(
+                [23.834333, 91.942208],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1db2bf6a96f9d8e56774cc9178990a97 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d60c09543ef20a573a5e608e41fea9a2 = $(`<div id="html_d60c09543ef20a573a5e608e41fea9a2" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3390<br>             <b>State:</b> TRIPURA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.48<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_1db2bf6a96f9d8e56774cc9178990a97.setContent(html_d60c09543ef20a573a5e608e41fea9a2);
+            
+        
+
+        circle_marker_20d104b4b1135a0483a67ce021579105.bindPopup(popup_1db2bf6a96f9d8e56774cc9178990a97)
+        ;
+
+        
+    
+    
+            var circle_marker_f72bdd186b8f4e25c3bea391ae366bfa = L.circleMarker(
+                [24.392541, 92.157995],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_d36bbc0453a03d8cc46e5819f6d2481a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ff7a9e8838f97c845e1ea2af4405341c = $(`<div id="html_ff7a9e8838f97c845e1ea2af4405341c" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4198<br>             <b>State:</b> TRIPURA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.20<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_d36bbc0453a03d8cc46e5819f6d2481a.setContent(html_ff7a9e8838f97c845e1ea2af4405341c);
+            
+        
+
+        circle_marker_f72bdd186b8f4e25c3bea391ae366bfa.bindPopup(popup_d36bbc0453a03d8cc46e5819f6d2481a)
+        ;
+
+        
+    
+    
+            var circle_marker_097eaef8597d5552f7c0c43d49f4478b = L.circleMarker(
+                [24.340189, 92.122992],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_16ad7a206a2dad8f7aa3a3f526391b25 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_287758d8f31e7f48961e525a90747489 = $(`<div id="html_287758d8f31e7f48961e525a90747489" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4199<br>             <b>State:</b> TRIPURA<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 7.60<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_16ad7a206a2dad8f7aa3a3f526391b25.setContent(html_287758d8f31e7f48961e525a90747489);
+            
+        
+
+        circle_marker_097eaef8597d5552f7c0c43d49f4478b.bindPopup(popup_16ad7a206a2dad8f7aa3a3f526391b25)
+        ;
+
+        
+    
+    
+            var circle_marker_6c0489c222875abe2a6b075fbbc14e51 = L.circleMarker(
+                [29.930289, 78.137206],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_699933f7eb77a6cd9427e241904a5139 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_eab725c315c7349a5903dfdaaa1459aa = $(`<div id="html_eab725c315c7349a5903dfdaaa1459aa" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2726<br>             <b>State:</b> UTTARAKHAND<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.41<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_699933f7eb77a6cd9427e241904a5139.setContent(html_eab725c315c7349a5903dfdaaa1459aa);
+            
+        
+
+        circle_marker_6c0489c222875abe2a6b075fbbc14e51.bindPopup(popup_699933f7eb77a6cd9427e241904a5139)
+        ;
+
+        
+    
+    
+            var circle_marker_fc5794d7d2477865b773c5891b3bc2e9 = L.circleMarker(
+                [29.947667, 78.161833],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6e98d6a16076dc2b7ce09dedd9c543c0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c96408d17a69bdff6b4751ef1252bc2e = $(`<div id="html_c96408d17a69bdff6b4751ef1252bc2e" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3998<br>             <b>State:</b> UTTARAKHAND<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.25<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_6e98d6a16076dc2b7ce09dedd9c543c0.setContent(html_c96408d17a69bdff6b4751ef1252bc2e);
+            
+        
+
+        circle_marker_fc5794d7d2477865b773c5891b3bc2e9.bindPopup(popup_6e98d6a16076dc2b7ce09dedd9c543c0)
+        ;
+
+        
+    
+    
+            var circle_marker_8ecdea90399945d5ebd838d29b93ed07 = L.circleMarker(
+                [29.754444, 78.276056],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_3bc4134bc11cd1cdac8e5e0a96d87e33 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_27d36fb975ce05cc433de619a068b5d0 = $(`<div id="html_27d36fb975ce05cc433de619a068b5d0" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3999<br>             <b>State:</b> UTTARAKHAND<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.34<br>             <b>Category:</b> Out of Range         </div>         </div>`)[0];
+                popup_3bc4134bc11cd1cdac8e5e0a96d87e33.setContent(html_27d36fb975ce05cc433de619a068b5d0);
+            
+        
+
+        circle_marker_8ecdea90399945d5ebd838d29b93ed07.bindPopup(popup_3bc4134bc11cd1cdac8e5e0a96d87e33)
+        ;
+
+        
+    
+    
+            var circle_marker_e60a8a7500700348ee655b203f6b42d7 = L.circleMarker(
+                [22.694406, 88.44775],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_4267342649f77d451577059438133117 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8d4cd2ab91868ad8185111b122e021a2 = $(`<div id="html_8d4cd2ab91868ad8185111b122e021a2" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2512<br>             <b>State:</b> WEST BENGAL<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.59<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_4267342649f77d451577059438133117.setContent(html_8d4cd2ab91868ad8185111b122e021a2);
+            
+        
+
+        circle_marker_e60a8a7500700348ee655b203f6b42d7.bindPopup(popup_4267342649f77d451577059438133117)
+        ;
+
+        
+    
+    
+            var circle_marker_eb44e867c5e9b6322547242dbe52cd7e = L.circleMarker(
+                [22.518705, 88.323864],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_91cfa83246598236e2a26a19249c4f9b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4e12003c5ac0b74c0f08557f6898cb87 = $(`<div id="html_4e12003c5ac0b74c0f08557f6898cb87" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2513<br>             <b>State:</b> WEST BENGAL<br>             <b>Water Body:</b> CANAL<br>             <b>pH (Max):</b> 8.12<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_91cfa83246598236e2a26a19249c4f9b.setContent(html_4e12003c5ac0b74c0f08557f6898cb87);
+            
+        
+
+        circle_marker_eb44e867c5e9b6322547242dbe52cd7e.bindPopup(popup_91cfa83246598236e2a26a19249c4f9b)
+        ;
+
+        
+    
+    
+            var circle_marker_39832c8345b00f57812a1b3c5a3426fe = L.circleMarker(
+                [15.354489, 73.883148],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_b3704806f2d17afa4ee99faeb694fee9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f9c8f87030d3da5750ab9da2e4cd001c = $(`<div id="html_f9c8f87030d3da5750ab9da2e4cd001c" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2267<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.45<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_b3704806f2d17afa4ee99faeb694fee9.setContent(html_f9c8f87030d3da5750ab9da2e4cd001c);
+            
+        
+
+        circle_marker_39832c8345b00f57812a1b3c5a3426fe.bindPopup(popup_b3704806f2d17afa4ee99faeb694fee9)
+        ;
+
+        
+    
+    
+            var circle_marker_7ba6eb7f0b55a88325e6dbf6236414d7 = L.circleMarker(
+                [15.720857, 73.68186],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_c055f00f0b981b96b35a6458489d4569 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_48bd195be2ca0eee085775189446d1a2 = $(`<div id="html_48bd195be2ca0eee085775189446d1a2" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4013<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.09<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_c055f00f0b981b96b35a6458489d4569.setContent(html_48bd195be2ca0eee085775189446d1a2);
+            
+        
+
+        circle_marker_7ba6eb7f0b55a88325e6dbf6236414d7.bindPopup(popup_c055f00f0b981b96b35a6458489d4569)
+        ;
+
+        
+    
+    
+            var circle_marker_32f371b45bfd6dfe20c7de6635a23dbc = L.circleMarker(
+                [15.482664, 73.807302],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_592cc08495f3d6dcf3645fb1e093a598 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_32eea1f753e217036f61b26c6857d6b8 = $(`<div id="html_32eea1f753e217036f61b26c6857d6b8" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4014<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_592cc08495f3d6dcf3645fb1e093a598.setContent(html_32eea1f753e217036f61b26c6857d6b8);
+            
+        
+
+        circle_marker_32f371b45bfd6dfe20c7de6635a23dbc.bindPopup(popup_592cc08495f3d6dcf3645fb1e093a598)
+        ;
+
+        
+    
+    
+            var circle_marker_41f0a76f05b98a5ce4dbba2df21aec63 = L.circleMarker(
+                [15.531787, 73.75851],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1bf5b3bc9ec395be5d4ebf3f2f3143f5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_89816bb2a93618e74bde0b78ff89db91 = $(`<div id="html_89816bb2a93618e74bde0b78ff89db91" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4015<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_1bf5b3bc9ec395be5d4ebf3f2f3143f5.setContent(html_89816bb2a93618e74bde0b78ff89db91);
+            
+        
+
+        circle_marker_41f0a76f05b98a5ce4dbba2df21aec63.bindPopup(popup_1bf5b3bc9ec395be5d4ebf3f2f3143f5)
+        ;
+
+        
+    
+    
+            var circle_marker_c0b7f2e5df082e0074a6508bcf45c836 = L.circleMarker(
+                [15.629169, 73.725747],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_da0b73e3c153347ca10f5c6e1ad2810f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_49f62d02705796cdb6559a1b3c131167 = $(`<div id="html_49f62d02705796cdb6559a1b3c131167" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4016<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.19<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_da0b73e3c153347ca10f5c6e1ad2810f.setContent(html_49f62d02705796cdb6559a1b3c131167);
+            
+        
+
+        circle_marker_c0b7f2e5df082e0074a6508bcf45c836.bindPopup(popup_da0b73e3c153347ca10f5c6e1ad2810f)
+        ;
+
+        
+    
+    
+            var circle_marker_3980f6df1490dfb4ddce431d05bccebc = L.circleMarker(
+                [15.156355, 73.944955],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6acd275fc46ad0ed868fdafd7938b122 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4c1b56a887924510a5f05c14ce764094 = $(`<div id="html_4c1b56a887924510a5f05c14ce764094" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4017<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.30<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_6acd275fc46ad0ed868fdafd7938b122.setContent(html_4c1b56a887924510a5f05c14ce764094);
+            
+        
+
+        circle_marker_3980f6df1490dfb4ddce431d05bccebc.bindPopup(popup_6acd275fc46ad0ed868fdafd7938b122)
+        ;
+
+        
+    
+    
+            var circle_marker_425bf7a4eef211366bb223252b7c375a = L.circleMarker(
+                [15.39155, 73.806607],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_ef300829d00228c9d0b0abd0181e0378 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b6b95ad0cdb42a081b8bf560b2bd15a8 = $(`<div id="html_b6b95ad0cdb42a081b8bf560b2bd15a8" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4018<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_ef300829d00228c9d0b0abd0181e0378.setContent(html_b6b95ad0cdb42a081b8bf560b2bd15a8);
+            
+        
+
+        circle_marker_425bf7a4eef211366bb223252b7c375a.bindPopup(popup_ef300829d00228c9d0b0abd0181e0378)
+        ;
+
+        
+    
+    
+            var circle_marker_fd119210573fca35d6cbc5e0f87e3815 = L.circleMarker(
+                [14.969011, 74.045068],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_b9f573f42e540a4c545f8f6ff1a9c2bb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7559eabdb71ebdbfa54cb4965bbcae28 = $(`<div id="html_7559eabdb71ebdbfa54cb4965bbcae28" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4019<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_b9f573f42e540a4c545f8f6ff1a9c2bb.setContent(html_7559eabdb71ebdbfa54cb4965bbcae28);
+            
+        
+
+        circle_marker_fd119210573fca35d6cbc5e0f87e3815.bindPopup(popup_b9f573f42e540a4c545f8f6ff1a9c2bb)
+        ;
+
+        
+    
+    
+            var circle_marker_a82397b808e75b5cbef36811063162a9 = L.circleMarker(
+                [15.277315, 73.912572],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_50109960a6c44fd5effad66fe4510231 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bd5553558142e738568ba1fde501936c = $(`<div id="html_bd5553558142e738568ba1fde501936c" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4020<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.30<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_50109960a6c44fd5effad66fe4510231.setContent(html_bd5553558142e738568ba1fde501936c);
+            
+        
+
+        circle_marker_a82397b808e75b5cbef36811063162a9.bindPopup(popup_50109960a6c44fd5effad66fe4510231)
+        ;
+
+        
+    
+    
+            var circle_marker_d7605247d96b3d1fef2c60995601ce4e = L.circleMarker(
+                [15.603125, 73.733511],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_cd14675dad05e01a93ab3bf45ce5a3dc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3a89cb63db4ec50eefd159b9b08e57f7 = $(`<div id="html_3a89cb63db4ec50eefd159b9b08e57f7" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4021<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.09<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_cd14675dad05e01a93ab3bf45ce5a3dc.setContent(html_3a89cb63db4ec50eefd159b9b08e57f7);
+            
+        
+
+        circle_marker_d7605247d96b3d1fef2c60995601ce4e.bindPopup(popup_cd14675dad05e01a93ab3bf45ce5a3dc)
+        ;
+
+        
+    
+    
+            var circle_marker_3968edb1c301bf1f586965a1602e335d = L.circleMarker(
+                [15.354661, 73.883923],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1adab5a7edc1d5752a1812ee65ff11b4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_97505614b5be5f55115b3dc1636a95c8 = $(`<div id="html_97505614b5be5f55115b3dc1636a95c8" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 4022<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> BEACH<br>             <b>pH (Max):</b> 8.23<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_1adab5a7edc1d5752a1812ee65ff11b4.setContent(html_97505614b5be5f55115b3dc1636a95c8);
+            
+        
+
+        circle_marker_3968edb1c301bf1f586965a1602e335d.bindPopup(popup_1adab5a7edc1d5752a1812ee65ff11b4)
+        ;
+
+        
+    
+    
+            var circle_marker_251de780cf4b7f6489e49acb4bfb2e5c = L.circleMarker(
+                [21.296333, 72.760033],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_627905705afc3e5c8d1c7e18a9014e3a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1bad6e8d9f2f041506425f7f4c0b7fba = $(`<div id="html_1bad6e8d9f2f041506425f7f4c0b7fba" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2080<br>             <b>State:</b> GUJARAT<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.36<br>             <b>Category:</b> Out of Range         </div>         </div>`)[0];
+                popup_627905705afc3e5c8d1c7e18a9014e3a.setContent(html_1bad6e8d9f2f041506425f7f4c0b7fba);
+            
+        
+
+        circle_marker_251de780cf4b7f6489e49acb4bfb2e5c.bindPopup(popup_627905705afc3e5c8d1c7e18a9014e3a)
+        ;
+
+        
+    
+    
+            var circle_marker_1319391ef32db9f2fcc90e8538f7a926 = L.circleMarker(
+                [21.615413, 72.941847],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_9b7d2ddde06eddfe85a87996e49eb264 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_881d20e65c805b71225c451b0f4bc183 = $(`<div id="html_881d20e65c805b71225c451b0f4bc183" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2081<br>             <b>State:</b> GUJARAT<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.05<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_9b7d2ddde06eddfe85a87996e49eb264.setContent(html_881d20e65c805b71225c451b0f4bc183);
+            
+        
+
+        circle_marker_1319391ef32db9f2fcc90e8538f7a926.bindPopup(popup_9b7d2ddde06eddfe85a87996e49eb264)
+        ;
+
+        
+    
+    
+            var circle_marker_25a71e6badafafd261ff0b0d6fa6a7a7 = L.circleMarker(
+                [21.628255, 73.016715],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_67573d5621816e69ac43a27425c74a67 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_cf33c470d28c67211d15ca4a6ec608f7 = $(`<div id="html_cf33c470d28c67211d15ca4a6ec608f7" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3196<br>             <b>State:</b> GUJARAT<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.14<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_67573d5621816e69ac43a27425c74a67.setContent(html_cf33c470d28c67211d15ca4a6ec608f7);
+            
+        
+
+        circle_marker_25a71e6badafafd261ff0b0d6fa6a7a7.bindPopup(popup_67573d5621816e69ac43a27425c74a67)
+        ;
+
+        
+    
+    
+            var circle_marker_52f004e3481c8fe77feff5ca12e5dce9 = L.circleMarker(
+                [19.229456, 73.002085],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_86317a7990787d371ffce222c7d38e2f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_cc70c35c00945b637c08d21e31e71fe5 = $(`<div id="html_cc70c35c00945b637c08d21e31e71fe5" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1316<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_86317a7990787d371ffce222c7d38e2f.setContent(html_cc70c35c00945b637c08d21e31e71fe5);
+            
+        
+
+        circle_marker_52f004e3481c8fe77feff5ca12e5dce9.bindPopup(popup_86317a7990787d371ffce222c7d38e2f)
+        ;
+
+        
+    
+    
+            var circle_marker_72e7b0cd73a1653d4e1f6aa85ddbf69a = L.circleMarker(
+                [19.15042, 72.980893],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_a3de62728b7d08b70d8edeef0e1d3423 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_991859084650e329eaff29397bc37eb7 = $(`<div id="html_991859084650e329eaff29397bc37eb7" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2184<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_a3de62728b7d08b70d8edeef0e1d3423.setContent(html_991859084650e329eaff29397bc37eb7);
+            
+        
+
+        circle_marker_72e7b0cd73a1653d4e1f6aa85ddbf69a.bindPopup(popup_a3de62728b7d08b70d8edeef0e1d3423)
+        ;
+
+        
+    
+    
+            var circle_marker_5a323bd2317fde9c61ff057ee32a98ae = L.circleMarker(
+                [19.061371, 72.970377],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_ae1ff0d2139e05e762dac7ad6554f2a9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0f479594e881025ce1307b5d1c465646 = $(`<div id="html_0f479594e881025ce1307b5d1c465646" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2185<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.30<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_ae1ff0d2139e05e762dac7ad6554f2a9.setContent(html_0f479594e881025ce1307b5d1c465646);
+            
+        
+
+        circle_marker_5a323bd2317fde9c61ff057ee32a98ae.bindPopup(popup_ae1ff0d2139e05e762dac7ad6554f2a9)
+        ;
+
+        
+    
+    
+            var circle_marker_4ba31a3c019701bea357c6d9506fccd3 = L.circleMarker(
+                [19.244118, 73.117187],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_760402a8dcbf691d6722a623b9d7dbff = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f2a8d1dd32bbe5a21e36066d8ea96b3a = $(`<div id="html_f2a8d1dd32bbe5a21e36066d8ea96b3a" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2791<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_760402a8dcbf691d6722a623b9d7dbff.setContent(html_f2a8d1dd32bbe5a21e36066d8ea96b3a);
+            
+        
+
+        circle_marker_4ba31a3c019701bea357c6d9506fccd3.bindPopup(popup_760402a8dcbf691d6722a623b9d7dbff)
+        ;
+
+        
+    
+    
+            var circle_marker_bfe490c721bf25526aac1bfcc2f28fa9 = L.circleMarker(
+                [19.202275, 73.02209],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_14a57894677c26d1e3b745e95c167625 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8bd8a410ffd08b3d3c86854d9dc5c4e6 = $(`<div id="html_8bd8a410ffd08b3d3c86854d9dc5c4e6" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2792<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_14a57894677c26d1e3b745e95c167625.setContent(html_8bd8a410ffd08b3d3c86854d9dc5c4e6);
+            
+        
+
+        circle_marker_bfe490c721bf25526aac1bfcc2f28fa9.bindPopup(popup_14a57894677c26d1e3b745e95c167625)
+        ;
+
+        
+    
+    
+            var circle_marker_131d4e51ad550d8012d7d80ce69ccd47 = L.circleMarker(
+                [19.197132, 72.985993],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_d0d8b032b56ee2823f010ea5a246eb43 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4f2111a5889e53b481edb8f561b0d7e0 = $(`<div id="html_4f2111a5889e53b481edb8f561b0d7e0" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2793<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_d0d8b032b56ee2823f010ea5a246eb43.setContent(html_4f2111a5889e53b481edb8f561b0d7e0);
+            
+        
+
+        circle_marker_131d4e51ad550d8012d7d80ce69ccd47.bindPopup(popup_d0d8b032b56ee2823f010ea5a246eb43)
+        ;
+
+        
+    
+    
+            var circle_marker_9683baf4eca993b66b0c9f4155aa0e01 = L.circleMarker(
+                [19.236012, 72.999586],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_3cf8c9074b34c63e888c9dd52a2e4daa = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3fe7a9a413d6b49f5c5e5199d4511515 = $(`<div id="html_3fe7a9a413d6b49f5c5e5199d4511515" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2794<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_3cf8c9074b34c63e888c9dd52a2e4daa.setContent(html_3fe7a9a413d6b49f5c5e5199d4511515);
+            
+        
+
+        circle_marker_9683baf4eca993b66b0c9f4155aa0e01.bindPopup(popup_3cf8c9074b34c63e888c9dd52a2e4daa)
+        ;
+
+        
+    
+    
+            var circle_marker_fbd2d7529ec04f8126065bd1caddf8b5 = L.circleMarker(
+                [19.28702, 72.937644],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_0daec495d9e05601ddace27b1d4859b3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_2dc77aa2d8b0a83b3f6aa781164944d4 = $(`<div id="html_2dc77aa2d8b0a83b3f6aa781164944d4" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2795<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_0daec495d9e05601ddace27b1d4859b3.setContent(html_2dc77aa2d8b0a83b3f6aa781164944d4);
+            
+        
+
+        circle_marker_fbd2d7529ec04f8126065bd1caddf8b5.bindPopup(popup_0daec495d9e05601ddace27b1d4859b3)
+        ;
+
+        
+    
+    
+            var circle_marker_12276d17ee00868f4a0cb0e02348588e = L.circleMarker(
+                [19.287397, 72.904918],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_5382dab39b1c4b55b38a7ab3be033017 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6888f3f56b7798277af31b1a53f89524 = $(`<div id="html_6888f3f56b7798277af31b1a53f89524" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2796<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_5382dab39b1c4b55b38a7ab3be033017.setContent(html_6888f3f56b7798277af31b1a53f89524);
+            
+        
+
+        circle_marker_12276d17ee00868f4a0cb0e02348588e.bindPopup(popup_5382dab39b1c4b55b38a7ab3be033017)
+        ;
+
+        
+    
+    
+            var circle_marker_ec8cd3b41781d1afb5154951553d0a50 = L.circleMarker(
+                [19.318553, 72.851316],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_3b35eb81039c1ec1b023d90bc20bcd60 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b1b4c0bf4b62b2b2d38c6b431d94a721 = $(`<div id="html_b1b4c0bf4b62b2b2d38c6b431d94a721" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2797<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_3b35eb81039c1ec1b023d90bc20bcd60.setContent(html_b1b4c0bf4b62b2b2d38c6b431d94a721);
+            
+        
+
+        circle_marker_ec8cd3b41781d1afb5154951553d0a50.bindPopup(popup_3b35eb81039c1ec1b023d90bc20bcd60)
+        ;
+
+        
+    
+    
+            var circle_marker_ea4a96b0371b3314bcdefde25cccd254 = L.circleMarker(
+                [19.800635, 72.684874],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_b4ee76ef4a7f5a66e4bae2d9c62b5e1c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a5968efd7d4d889f238b89a68b7fa69d = $(`<div id="html_a5968efd7d4d889f238b89a68b7fa69d" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2799<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_b4ee76ef4a7f5a66e4bae2d9c62b5e1c.setContent(html_a5968efd7d4d889f238b89a68b7fa69d);
+            
+        
+
+        circle_marker_ea4a96b0371b3314bcdefde25cccd254.bindPopup(popup_b4ee76ef4a7f5a66e4bae2d9c62b5e1c)
+        ;
+
+        
+    
+    
+            var circle_marker_1adc00577a91a9251b42c67acbd9405c = L.circleMarker(
+                [19.775596, 72.755901],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_0e6a403f6457a51af000642b1a771997 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ef361806c82649820c73a3f47169b8bc = $(`<div id="html_ef361806c82649820c73a3f47169b8bc" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2800<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.30<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_0e6a403f6457a51af000642b1a771997.setContent(html_ef361806c82649820c73a3f47169b8bc);
+            
+        
+
+        circle_marker_1adc00577a91a9251b42c67acbd9405c.bindPopup(popup_0e6a403f6457a51af000642b1a771997)
+        ;
+
+        
+    
+    
+            var circle_marker_8175ce87ce454906666ac2ebb861ca61 = L.circleMarker(
+                [19.965659, 72.779863],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_a19d6af4bbcf6488681d94ed8b79a0a9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_150cb8cccfefd8d96ebd88feb7e12540 = $(`<div id="html_150cb8cccfefd8d96ebd88feb7e12540" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2801<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_a19d6af4bbcf6488681d94ed8b79a0a9.setContent(html_150cb8cccfefd8d96ebd88feb7e12540);
+            
+        
+
+        circle_marker_8175ce87ce454906666ac2ebb861ca61.bindPopup(popup_a19d6af4bbcf6488681d94ed8b79a0a9)
+        ;
+
+        
+    
+    
+            var circle_marker_bee6367fd2f480593861da952533ba71 = L.circleMarker(
+                [19.972691, 72.717154],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_d741201fc9f6c547287d20f7323c4937 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_92611e04449aab60888f44f6c3aed056 = $(`<div id="html_92611e04449aab60888f44f6c3aed056" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2802<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_d741201fc9f6c547287d20f7323c4937.setContent(html_92611e04449aab60888f44f6c3aed056);
+            
+        
+
+        circle_marker_bee6367fd2f480593861da952533ba71.bindPopup(popup_d741201fc9f6c547287d20f7323c4937)
+        ;
+
+        
+    
+    
+            var circle_marker_abd693c71d6b2c657a576d80523d42c0 = L.circleMarker(
+                [19.034286, 73.082422],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_e4e9e85e3d438e5462626c243f8d19b0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e85dad5baab5657fbbd3c07bbc40bbda = $(`<div id="html_e85dad5baab5657fbbd3c07bbc40bbda" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2803<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_e4e9e85e3d438e5462626c243f8d19b0.setContent(html_e85dad5baab5657fbbd3c07bbc40bbda);
+            
+        
+
+        circle_marker_abd693c71d6b2c657a576d80523d42c0.bindPopup(popup_e4e9e85e3d438e5462626c243f8d19b0)
+        ;
+
+        
+    
+    
+            var circle_marker_37489225caa98f50c96982a951a82243 = L.circleMarker(
+                [17.579149, 73.426908],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_9c0d17fa1fb380a6d1d303a912c93c6a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6a5ecb623aa13ea5dcf535b4e2c14bfe = $(`<div id="html_6a5ecb623aa13ea5dcf535b4e2c14bfe" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2804<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.80<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_9c0d17fa1fb380a6d1d303a912c93c6a.setContent(html_6a5ecb623aa13ea5dcf535b4e2c14bfe);
+            
+        
+
+        circle_marker_37489225caa98f50c96982a951a82243.bindPopup(popup_9c0d17fa1fb380a6d1d303a912c93c6a)
+        ;
+
+        
+    
+    
+            var circle_marker_cb6d0f8f62225f9a46b803d6642e494a = L.circleMarker(
+                [18.967313, 72.929655],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_872be0be6b68f67e91645fb2b08e37c1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3951fbaebcfb1b8659fe01a2542048a8 = $(`<div id="html_3951fbaebcfb1b8659fe01a2542048a8" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1317<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.80<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_872be0be6b68f67e91645fb2b08e37c1.setContent(html_3951fbaebcfb1b8659fe01a2542048a8);
+            
+        
+
+        circle_marker_cb6d0f8f62225f9a46b803d6642e494a.bindPopup(popup_872be0be6b68f67e91645fb2b08e37c1)
+        ;
+
+        
+    
+    
+            var circle_marker_6d18d029ed6ffe5f4b833f00da17fcfa = L.circleMarker(
+                [19.038979, 72.827674],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1cd60940dd583208089162c2ecdc47ad = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e15b5da2f00758d4343eee07c8ebd2a6 = $(`<div id="html_e15b5da2f00758d4343eee07c8ebd2a6" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 1318<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.70<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_1cd60940dd583208089162c2ecdc47ad.setContent(html_e15b5da2f00758d4343eee07c8ebd2a6);
+            
+        
+
+        circle_marker_6d18d029ed6ffe5f4b833f00da17fcfa.bindPopup(popup_1cd60940dd583208089162c2ecdc47ad)
+        ;
+
+        
+    
+    
+            var circle_marker_b9a5ab6958853c629d69bb55ee445a5d = L.circleMarker(
+                [18.92178, 72.834732],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_10020fbcafa256d5f8111ea08b062a91 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b5ef30112a1dd82ce38e8b4ba2049832 = $(`<div id="html_b5ef30112a1dd82ce38e8b4ba2049832" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2165<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 7.80<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_10020fbcafa256d5f8111ea08b062a91.setContent(html_b5ef30112a1dd82ce38e8b4ba2049832);
+            
+        
+
+        circle_marker_b9a5ab6958853c629d69bb55ee445a5d.bindPopup(popup_10020fbcafa256d5f8111ea08b062a91)
+        ;
+
+        
+    
+    
+            var circle_marker_8ca9b44d8b185026fbd14c2db91b3259 = L.circleMarker(
+                [18.949037, 72.819111],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_859a9887befb77200bcd47172843361c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0a67c5f88dfbddf5e36d31c3fec743c4 = $(`<div id="html_0a67c5f88dfbddf5e36d31c3fec743c4" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2166<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_859a9887befb77200bcd47172843361c.setContent(html_0a67c5f88dfbddf5e36d31c3fec743c4);
+            
+        
+
+        circle_marker_8ca9b44d8b185026fbd14c2db91b3259.bindPopup(popup_859a9887befb77200bcd47172843361c)
+        ;
+
+        
+    
+    
+            var circle_marker_277c103147db77262e65b923f1a2fa12 = L.circleMarker(
+                [18.997883, 72.811319],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_c86c3f0d33f96094c6823fd5fc1ae778 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_192af21f67b44907d4224f014dd9816e = $(`<div id="html_192af21f67b44907d4224f014dd9816e" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2167<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_c86c3f0d33f96094c6823fd5fc1ae778.setContent(html_192af21f67b44907d4224f014dd9816e);
+            
+        
+
+        circle_marker_277c103147db77262e65b923f1a2fa12.bindPopup(popup_c86c3f0d33f96094c6823fd5fc1ae778)
+        ;
+
+        
+    
+    
+            var circle_marker_41845c8bc02b1956b226360ec653d37f = L.circleMarker(
+                [19.133791, 72.810349],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6cc1501c9c6cb347dca4566a561a8eeb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fbdb33a58fa2a6ce6275ecf7c4c6e665 = $(`<div id="html_fbdb33a58fa2a6ce6275ecf7c4c6e665" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2169<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_6cc1501c9c6cb347dca4566a561a8eeb.setContent(html_fbdb33a58fa2a6ce6275ecf7c4c6e665);
+            
+        
+
+        circle_marker_41845c8bc02b1956b226360ec653d37f.bindPopup(popup_6cc1501c9c6cb347dca4566a561a8eeb)
+        ;
+
+        
+    
+    
+            var circle_marker_8852c00048dda3f51ebaec8619f1eee1 = L.circleMarker(
+                [17.579149, 73.426908],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1b634370f35046556f459752fbb20db7 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f9501848f665a8f368d1899416450685 = $(`<div id="html_f9501848f665a8f368d1899416450685" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2804<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_1b634370f35046556f459752fbb20db7.setContent(html_f9501848f665a8f368d1899416450685);
+            
+        
+
+        circle_marker_8852c00048dda3f51ebaec8619f1eee1.bindPopup(popup_1b634370f35046556f459752fbb20db7)
+        ;
+
+        
+    
+    
+            var circle_marker_efaad6f0cebe9cc2d1e8db0f77821143 = L.circleMarker(
+                [19.452095, 72.747609],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_4c699a2402a7da0481a70f1f3027ac3d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_aa94b948f9ff2db538fff7ab5866811f = $(`<div id="html_aa94b948f9ff2db538fff7ab5866811f" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2805<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_4c699a2402a7da0481a70f1f3027ac3d.setContent(html_aa94b948f9ff2db538fff7ab5866811f);
+            
+        
+
+        circle_marker_efaad6f0cebe9cc2d1e8db0f77821143.bindPopup(popup_4c699a2402a7da0481a70f1f3027ac3d)
+        ;
+
+        
+    
+    
+            var circle_marker_bc15641deb778f839d9da16895e9251e = L.circleMarker(
+                [19.28193, 72.783267],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_e5f5b4cdcccbfdd3814401b13836c1a1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a48ba9ff9184fcb210e3d9442d1efbad = $(`<div id="html_a48ba9ff9184fcb210e3d9442d1efbad" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2806<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_e5f5b4cdcccbfdd3814401b13836c1a1.setContent(html_a48ba9ff9184fcb210e3d9442d1efbad);
+            
+        
+
+        circle_marker_bc15641deb778f839d9da16895e9251e.bindPopup(popup_e5f5b4cdcccbfdd3814401b13836c1a1)
+        ;
+
+        
+    
+    
+            var circle_marker_f0d3df48a0f6e23d9c97d82eb4730c73 = L.circleMarker(
+                [19.789433, 72.68845],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_7b856fd91b402e4e4e97c680bdf66b73 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1a4fdaba00a99a62c4a78431d477590f = $(`<div id="html_1a4fdaba00a99a62c4a78431d477590f" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2807<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.60<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_7b856fd91b402e4e4e97c680bdf66b73.setContent(html_1a4fdaba00a99a62c4a78431d477590f);
+            
+        
+
+        circle_marker_f0d3df48a0f6e23d9c97d82eb4730c73.bindPopup(popup_7b856fd91b402e4e4e97c680bdf66b73)
+        ;
+
+        
+    
+    
+            var circle_marker_ef86c1e84f29c6cbe3c26b207ee9b4e9 = L.circleMarker(
+                [18.922538, 72.823514],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_669406895c36672c0ede10a80dcf3915 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_02b9a5d68c17abe268f848d6d1046009 = $(`<div id="html_02b9a5d68c17abe268f848d6d1046009" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2808<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_669406895c36672c0ede10a80dcf3915.setContent(html_02b9a5d68c17abe268f848d6d1046009);
+            
+        
+
+        circle_marker_ef86c1e84f29c6cbe3c26b207ee9b4e9.bindPopup(popup_669406895c36672c0ede10a80dcf3915)
+        ;
+
+        
+    
+    
+            var circle_marker_4c8db8bb4bf958097c7c1ff33a5ec26e = L.circleMarker(
+                [18.950337, 72.803241],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_853ffba3cb0f09f3a3f2172336134bf8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a899a30a3428ebb2b2e6c43917efb32e = $(`<div id="html_a899a30a3428ebb2b2e6c43917efb32e" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2809<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_853ffba3cb0f09f3a3f2172336134bf8.setContent(html_a899a30a3428ebb2b2e6c43917efb32e);
+            
+        
+
+        circle_marker_4c8db8bb4bf958097c7c1ff33a5ec26e.bindPopup(popup_853ffba3cb0f09f3a3f2172336134bf8)
+        ;
+
+        
+    
+    
+            var circle_marker_621468ed49a04ebf8b48034eca2bd282 = L.circleMarker(
+                [18.982292, 72.808923],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_c2a4ed4ed83082468cf5fdbedfa56a58 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_60988555b0279e50bb1efe3af99aa669 = $(`<div id="html_60988555b0279e50bb1efe3af99aa669" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2810<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 7.90<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_c2a4ed4ed83082468cf5fdbedfa56a58.setContent(html_60988555b0279e50bb1efe3af99aa669);
+            
+        
+
+        circle_marker_621468ed49a04ebf8b48034eca2bd282.bindPopup(popup_c2a4ed4ed83082468cf5fdbedfa56a58)
+        ;
+
+        
+    
+    
+            var circle_marker_34fd6f746ea4d0f580d426988a387735 = L.circleMarker(
+                [19.026945, 72.834925],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1a38bc9fddba311f4503b69e391af8d8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_deb2cc4a10cf834dbb886248f450784a = $(`<div id="html_deb2cc4a10cf834dbb886248f450784a" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2811<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 7.70<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_1a38bc9fddba311f4503b69e391af8d8.setContent(html_deb2cc4a10cf834dbb886248f450784a);
+            
+        
+
+        circle_marker_34fd6f746ea4d0f580d426988a387735.bindPopup(popup_1a38bc9fddba311f4503b69e391af8d8)
+        ;
+
+        
+    
+    
+            var circle_marker_35a904be69612ed3a9e996bccc7388c7 = L.circleMarker(
+                [19.089151, 72.826028],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_a1ac502e2ae5c62d5c9913f49c355f95 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f786d78898b62486422b13a2a9beacf5 = $(`<div id="html_f786d78898b62486422b13a2a9beacf5" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2812<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_a1ac502e2ae5c62d5c9913f49c355f95.setContent(html_f786d78898b62486422b13a2a9beacf5);
+            
+        
+
+        circle_marker_35a904be69612ed3a9e996bccc7388c7.bindPopup(popup_a1ac502e2ae5c62d5c9913f49c355f95)
+        ;
+
+        
+    
+    
+            var circle_marker_4d30111310f825a7a5c19e4217f8cb8c = L.circleMarker(
+                [17.147195, 73.26473],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6bdd1dc491ebe5932d7b8deb7cec3930 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bd996f1ab6e4a144f49b158a9d8cea6d = $(`<div id="html_bd996f1ab6e4a144f49b158a9d8cea6d" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2813<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_6bdd1dc491ebe5932d7b8deb7cec3930.setContent(html_bd996f1ab6e4a144f49b158a9d8cea6d);
+            
+        
+
+        circle_marker_4d30111310f825a7a5c19e4217f8cb8c.bindPopup(popup_6bdd1dc491ebe5932d7b8deb7cec3930)
+        ;
+
+        
+    
+    
+            var circle_marker_7c9ad8516bdbb17df0954d1145c8ee8c = L.circleMarker(
+                [16.997318, 73.272523],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_a70875390932f72c78278a88bf9f2325 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ecf8499ccdb4d3fff649228f6c5191e1 = $(`<div id="html_ecf8499ccdb4d3fff649228f6c5191e1" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2814<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_a70875390932f72c78278a88bf9f2325.setContent(html_ecf8499ccdb4d3fff649228f6c5191e1);
+            
+        
+
+        circle_marker_7c9ad8516bdbb17df0954d1145c8ee8c.bindPopup(popup_a70875390932f72c78278a88bf9f2325)
+        ;
+
+        
+    
+    
+            var circle_marker_064f3d644072b96b6c5a0b54a3b6a28e = L.circleMarker(
+                [16.989085, 73.284499],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_b3f5218a6b707b82da0a14804e624d3f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_12669f0edc385d96398301412437d933 = $(`<div id="html_12669f0edc385d96398301412437d933" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2815<br>             <b>State:</b> MAHARASHTRA<br>             <b>Water Body:</b> SEA<br>             <b>pH (Max):</b> 8.10<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_b3f5218a6b707b82da0a14804e624d3f.setContent(html_12669f0edc385d96398301412437d933);
+            
+        
+
+        circle_marker_064f3d644072b96b6c5a0b54a3b6a28e.bindPopup(popup_b3f5218a6b707b82da0a14804e624d3f)
+        ;
+
+        
+    
+    
+            var circle_marker_51af42a70d3ba97958722a14d512c967 = L.circleMarker(
+                [19.793145, 85.823008],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_9a9e571483429f7b8e986c1078c1403e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b71231e6ce9ae9a80c70224a8562fc1a = $(`<div id="html_b71231e6ce9ae9a80c70224a8562fc1a" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2439<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.40<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_9a9e571483429f7b8e986c1078c1403e.setContent(html_b71231e6ce9ae9a80c70224a8562fc1a);
+            
+        
+
+        circle_marker_51af42a70d3ba97958722a14d512c967.bindPopup(popup_9a9e571483429f7b8e986c1078c1403e)
+        ;
+
+        
+    
+    
+            var circle_marker_71dd2cd6bbbfc486d3271e5254d3856a = L.circleMarker(
+                [20.297233, 86.711367],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_cdb706c428ffceb7bd61c48fd4821e63 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a1bb937f614e6d113f272bfa60e964f4 = $(`<div id="html_a1bb937f614e6d113f272bfa60e964f4" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2440<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_cdb706c428ffceb7bd61c48fd4821e63.setContent(html_a1bb937f614e6d113f272bfa60e964f4);
+            
+        
+
+        circle_marker_71dd2cd6bbbfc486d3271e5254d3856a.bindPopup(popup_cdb706c428ffceb7bd61c48fd4821e63)
+        ;
+
+        
+    
+    
+            var circle_marker_e50d17c4a0c58f143da86cbbadd2c942 = L.circleMarker(
+                [19.256114, 84.908246],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_f5b5ea613e66ba4b0062de8919a43e96 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3677ef5b10044b447b5394e5e2ed7e96 = $(`<div id="html_3677ef5b10044b447b5394e5e2ed7e96" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 2441<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_f5b5ea613e66ba4b0062de8919a43e96.setContent(html_3677ef5b10044b447b5394e5e2ed7e96);
+            
+        
+
+        circle_marker_e50d17c4a0c58f143da86cbbadd2c942.bindPopup(popup_f5b5ea613e66ba4b0062de8919a43e96)
+        ;
+
+        
+    
+    
+            var circle_marker_62148f1c5a9d2b84ca567594e4d16c24 = L.circleMarker(
+                [20.289536, 86.649164],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_d7e4bde174102d5ecedab289d7c1700a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fc7aaa98532b09886707b92ed83908d5 = $(`<div id="html_fc7aaa98532b09886707b92ed83908d5" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3961<br>             <b>State:</b> ODISHA<br>             <b>Water Body:</b> CREEK<br>             <b>pH (Max):</b> 7.70<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_d7e4bde174102d5ecedab289d7c1700a.setContent(html_fc7aaa98532b09886707b92ed83908d5);
+            
+        
+
+        circle_marker_62148f1c5a9d2b84ca567594e4d16c24.bindPopup(popup_d7e4bde174102d5ecedab289d7c1700a)
+        ;
+
+        
+    
+    
+            var circle_marker_15183bba5b588ab37f03a469fc005099 = L.circleMarker(
+                [16.991222, 81.790125],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_3b0e2f2395ea7ad51514cac8935d26ff = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fbd0f4f2672e3ae81c74daf833f0ecf2 = $(`<div id="html_fbd0f4f2672e3ae81c74daf833f0ecf2" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20004<br>             <b>State:</b> ANDHRA PRADESH<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 8.09<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_3b0e2f2395ea7ad51514cac8935d26ff.setContent(html_fbd0f4f2672e3ae81c74daf833f0ecf2);
+            
+        
+
+        circle_marker_15183bba5b588ab37f03a469fc005099.bindPopup(popup_3b0e2f2395ea7ad51514cac8935d26ff)
+        ;
+
+        
+    
+    
+            var circle_marker_7289a26648a374989140e7bd0e209ac1 = L.circleMarker(
+                [15.482447, 73.81748],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_793f6a9b357258f78202a1a7535be7ac = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8293a35ee6dab2aacdeeb0af00066ff4 = $(`<div id="html_8293a35ee6dab2aacdeeb0af00066ff4" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20013<br>             <b>State:</b> GOA<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 7.63<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_793f6a9b357258f78202a1a7535be7ac.setContent(html_8293a35ee6dab2aacdeeb0af00066ff4);
+            
+        
+
+        circle_marker_7289a26648a374989140e7bd0e209ac1.bindPopup(popup_793f6a9b357258f78202a1a7535be7ac)
+        ;
+
+        
+    
+    
+            var circle_marker_f8beac93664f0a7ce5ca178da579ccc1 = L.circleMarker(
+                [9.419602, 77.065306],
+                {"bubblingMouseEvents": true, "color": "#8A2BE2", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8A2BE2", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_77f688a6d934ae5f353fd41ced30921d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ec1cc2c4052f75d915a44cc84ec2e3a4 = $(`<div id="html_ec1cc2c4052f75d915a44cc84ec2e3a4" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20017<br>             <b>State:</b> KERALA<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 9.30<br>             <b>Category:</b> Highly Alkaline         </div>         </div>`)[0];
+                popup_77f688a6d934ae5f353fd41ced30921d.setContent(html_ec1cc2c4052f75d915a44cc84ec2e3a4);
+            
+        
+
+        circle_marker_f8beac93664f0a7ce5ca178da579ccc1.bindPopup(popup_77f688a6d934ae5f353fd41ced30921d)
+        ;
+
+        
+    
+    
+            var circle_marker_dc425d7df71d892f22fe7d87996cc662 = L.circleMarker(
+                [31.274476, 75.591422],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1d02a53420853a490e4d79710cd5267f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_714f9c36b3b5be5cc00b4d53542ba709 = $(`<div id="html_714f9c36b3b5be5cc00b4d53542ba709" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20021<br>             <b>State:</b> PUNJAB<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 7.80<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_1d02a53420853a490e4d79710cd5267f.setContent(html_714f9c36b3b5be5cc00b4d53542ba709);
+            
+        
+
+        circle_marker_dc425d7df71d892f22fe7d87996cc662.bindPopup(popup_1d02a53420853a490e4d79710cd5267f)
+        ;
+
+        
+    
+    
+            var circle_marker_7c5d789a8a10a1ab4b263c84d3a6ffa4 = L.circleMarker(
+                [31.06944, 75.7816],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_e7ee8700e54c25221a3f9ac2852f6c20 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f1045761d2dcf2afabfecfbd58824b3a = $(`<div id="html_f1045761d2dcf2afabfecfbd58824b3a" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20022<br>             <b>State:</b> PUNJAB<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 7.63<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_e7ee8700e54c25221a3f9ac2852f6c20.setContent(html_f1045761d2dcf2afabfecfbd58824b3a);
+            
+        
+
+        circle_marker_7c5d789a8a10a1ab4b263c84d3a6ffa4.bindPopup(popup_e7ee8700e54c25221a3f9ac2852f6c20)
+        ;
+
+        
+    
+    
+            var circle_marker_5e6dc2e341b3f31bb1d7c35c8f5df3ee = L.circleMarker(
+                [30.934096, 75.79425],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6b4572adb0fe524877de868111f13d8e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_dfd7c456b951dec7b71d8216be49cc88 = $(`<div id="html_dfd7c456b951dec7b71d8216be49cc88" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20023<br>             <b>State:</b> PUNJAB<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 7.42<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_6b4572adb0fe524877de868111f13d8e.setContent(html_dfd7c456b951dec7b71d8216be49cc88);
+            
+        
+
+        circle_marker_5e6dc2e341b3f31bb1d7c35c8f5df3ee.bindPopup(popup_6b4572adb0fe524877de868111f13d8e)
+        ;
+
+        
+    
+    
+            var circle_marker_2d0772febdc56621c29c298e54eb163e = L.circleMarker(
+                [31.528404, 75.612356],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_2d506439c6ee0805e04395fc87e6a5ac = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_195287445e046760b262521d81625ff7 = $(`<div id="html_195287445e046760b262521d81625ff7" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20024<br>             <b>State:</b> PUNJAB<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 7.84<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_2d506439c6ee0805e04395fc87e6a5ac.setContent(html_195287445e046760b262521d81625ff7);
+            
+        
+
+        circle_marker_2d0772febdc56621c29c298e54eb163e.bindPopup(popup_2d506439c6ee0805e04395fc87e6a5ac)
+        ;
+
+        
+    
+    
+            var circle_marker_8704821dede3e5ded5ee72c687f764e3 = L.circleMarker(
+                [31.245564, 75.761199],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_6b8c6d8f5668183153797e53748540d1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f5ebceee17b66ffabb95751b608261d6 = $(`<div id="html_f5ebceee17b66ffabb95751b608261d6" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20025<br>             <b>State:</b> PUNJAB<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 7.70<br>             <b>Category:</b> Moderately Acidic         </div>         </div>`)[0];
+                popup_6b8c6d8f5668183153797e53748540d1.setContent(html_f5ebceee17b66ffabb95751b608261d6);
+            
+        
+
+        circle_marker_8704821dede3e5ded5ee72c687f764e3.bindPopup(popup_6b8c6d8f5668183153797e53748540d1)
+        ;
+
+        
+    
+    
+            var circle_marker_eae4cb626190f305c33287c0eee85e76 = L.circleMarker(
+                [30.998154, 75.79065],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00BFFF", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_39d13a09bc9d41333fe503b21f9e0b70 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d3bfdd6058c2e567f68cd3f49ebb3430 = $(`<div id="html_d3bfdd6058c2e567f68cd3f49ebb3430" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20026<br>             <b>State:</b> PUNJAB<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 8.40<br>             <b>Category:</b> Moderately Alkaline         </div>         </div>`)[0];
+                popup_39d13a09bc9d41333fe503b21f9e0b70.setContent(html_d3bfdd6058c2e567f68cd3f49ebb3430);
+            
+        
+
+        circle_marker_eae4cb626190f305c33287c0eee85e76.bindPopup(popup_39d13a09bc9d41333fe503b21f9e0b70)
+        ;
+
+        
+    
+    
+            var circle_marker_bf1a0bbc3b0210c4892824f4169aedb2 = L.circleMarker(
+                [31.215153, 75.190901],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_1cde90c682d9e4620a026e4f528a162d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c936d383d6dc6c8e68c41b890dff7ff4 = $(`<div id="html_c936d383d6dc6c8e68c41b890dff7ff4" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 20028<br>             <b>State:</b> PUNJAB<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 8.20<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_1cde90c682d9e4620a026e4f528a162d.setContent(html_c936d383d6dc6c8e68c41b890dff7ff4);
+            
+        
+
+        circle_marker_bf1a0bbc3b0210c4892824f4169aedb2.bindPopup(popup_1cde90c682d9e4620a026e4f528a162d)
+        ;
+
+        
+    
+    
+            var circle_marker_6151f1caf100c4484a65768a55bd3b9c = L.circleMarker(
+                [28.671142, 77.049299],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FF00", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_4902b4cf95bbab9a42a9e0bd96792b52 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f92b095de8c30c1de978ccad11e0674f = $(`<div id="html_f92b095de8c30c1de978ccad11e0674f" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3044<br>             <b>State:</b> DELHI<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 8.00<br>             <b>Category:</b> Acceptable         </div>         </div>`)[0];
+                popup_4902b4cf95bbab9a42a9e0bd96792b52.setContent(html_f92b095de8c30c1de978ccad11e0674f);
+            
+        
+
+        circle_marker_6151f1caf100c4484a65768a55bd3b9c.bindPopup(popup_4902b4cf95bbab9a42a9e0bd96792b52)
+        ;
+
+        
+    
+    
+            var circle_marker_572e25c9fac406cd84025d92d3fc5182 = L.circleMarker(
+                [28.721325, 77.140314],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FF0000", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_91d2e18b1f3ca9e05ab1bd372ef421a9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_62e60a8240a22b782d7798418c6838f0 = $(`<div id="html_62e60a8240a22b782d7798418c6838f0" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3045<br>             <b>State:</b> DELHI<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> 7.40<br>             <b>Category:</b> Highly Acidic         </div>         </div>`)[0];
+                popup_91d2e18b1f3ca9e05ab1bd372ef421a9.setContent(html_62e60a8240a22b782d7798418c6838f0);
+            
+        
+
+        circle_marker_572e25c9fac406cd84025d92d3fc5182.bindPopup(popup_91d2e18b1f3ca9e05ab1bd372ef421a9)
+        ;
+
+        
+    
+    
+            var circle_marker_c2693908a43cea4b4d98c4b35f38ff2e = L.circleMarker(
+                [28.600367, 77.061682],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47);
+        
+    
+        var popup_5d8024bf15095eada0139faf272d972c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_065d4744de6a2770b233e500e975f811 = $(`<div id="html_065d4744de6a2770b233e500e975f811" style="width: 100.0%; height: 100.0%;">         <div style='width: 250px; overflow-wrap: break-word; font-size: 13px;'>             <b>Station:</b> 3046<br>             <b>State:</b> DELHI<br>             <b>Water Body:</b> STP<br>             <b>pH (Max):</b> N/A<br>             <b>Category:</b> No Data         </div>         </div>`)[0];
+                popup_5d8024bf15095eada0139faf272d972c.setContent(html_065d4744de6a2770b233e500e975f811);
+            
+        
+
+        circle_marker_c2693908a43cea4b4d98c4b35f38ff2e.bindPopup(popup_5d8024bf15095eada0139faf272d972c)
+        ;
+
+        
+    
+    
+            marker_cluster_5c311cb1e148eab0ae9f26ffab7aba47.addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            var poly_line_b3475c89cb3bc62cc2ccbc17f0929bb6 = L.polyline(
+                [[16.854914, 82.231328], [17.042624, 82.166873]],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_b3475c89cb3bc62cc2ccbc17f0929bb6.bindTooltip(
+                `<div>
+                     Segment 0 | Avg pH: 8.35 (Out of Range)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_cd84cc32d211755163882671b0c35ee7 = L.polyline(
+                [[28.600367, 77.061682], [28.671142, 77.049299], [28.72121, 77.139675], [28.721325, 77.140314], [28.805764, 77.046769]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_cd84cc32d211755163882671b0c35ee7.bindTooltip(
+                `<div>
+                     Segment 2 | Avg pH: 7.78 (Moderately Acidic)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_3d91c9655830f0a0555aa518e4b148d2 = L.polyline(
+                [[28.506624, 77.314305], [28.546369, 77.312597]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_3d91c9655830f0a0555aa518e4b148d2.bindTooltip(
+                `<div>
+                     Segment 3 | Avg pH: 7.65 (Moderately Acidic)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_f2b16fc9d2d5c38b60527dff5df2802e = L.polyline(
+                [[15.156355, 73.944955], [15.16806, 74.010058], [15.182391, 73.990575], [15.277315, 73.912572], [15.354489, 73.883148], [15.354661, 73.883923], [15.39155, 73.806607], [15.482447, 73.81748], [15.482664, 73.807302], [15.502818, 73.949118], [15.531787, 73.75851], [15.603125, 73.733511], [15.629169, 73.725747], [15.720857, 73.68186]],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_f2b16fc9d2d5c38b60527dff5df2802e.bindTooltip(
+                `<div>
+                     Segment 4 | Avg pH: 8.00 (Out of Range)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_f385bad058f7382479aaf16d125a3317 = L.polyline(
+                [[21.589419, 72.975333], [21.615413, 72.941847], [21.628255, 73.016715]],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00BFFF", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_f385bad058f7382479aaf16d125a3317.bindTooltip(
+                `<div>
+                     Segment 6 | Avg pH: 8.53 (Moderately Alkaline)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_d5fba0a76db7acda7efb6c73c95c6fbc = L.polyline(
+                [[30.074141, 77.216343], [30.104731, 77.257543]],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00FF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_d5fba0a76db7acda7efb6c73c95c6fbc.bindTooltip(
+                `<div>
+                     Segment 7 | Avg pH: 8.20 (Acceptable)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_ec8f2add0ff966d234c46b4f9810bcb9 = L.polyline(
+                [[29.173241, 76.91024], [29.358769, 76.950469]],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00FF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_ec8f2add0ff966d234c46b4f9810bcb9.bindTooltip(
+                `<div>
+                     Segment 12 | Avg pH: 8.11 (Acceptable)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_d7934b1eaed9ff4094d51bb67375f3eb = L.polyline(
+                [[10.07305, 76.286714], [10.1108, 76.476031]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_d7934b1eaed9ff4094d51bb67375f3eb.bindTooltip(
+                `<div>
+                     Segment 15 | Avg pH: 7.25 (Highly Acidic)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_241e1e4a5b041a216d06651ef47c58ad = L.polyline(
+                [[20.310958, 85.891764], [20.315758, 86.085088], [20.315874, 86.084897], [20.350009, 85.880072], [20.424356, 85.963655], [20.454888, 85.924125], [20.459583, 85.891508], [20.474944, 85.901762]],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00FF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_241e1e4a5b041a216d06651ef47c58ad.bindTooltip(
+                `<div>
+                     Segment 17 | Avg pH: 8.01 (Acceptable)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_118f68f4b986428349db69c82e68e992 = L.polyline(
+                [[19.793145, 85.823008], [19.887419, 85.813792]],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00BFFF", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_118f68f4b986428349db69c82e68e992.bindTooltip(
+                `<div>
+                     Segment 18 | Avg pH: 8.50 (Moderately Alkaline)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_f587c748fbd2e3b2cc31f09628b427d3 = L.polyline(
+                [[23.844592, 91.276394], [23.902792, 91.394906]],
+                {"bubblingMouseEvents": true, "color": "#00BFFF", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00BFFF", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_f587c748fbd2e3b2cc31f09628b427d3.bindTooltip(
+                `<div>
+                     Segment 22 | Avg pH: 8.45 (Moderately Alkaline)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_8252f4281a625ef10e6004724d79354e = L.polyline(
+                [[23.834333, 91.942208], [23.849131, 91.924411]],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_8252f4281a625ef10e6004724d79354e.bindTooltip(
+                `<div>
+                     Segment 24 | Avg pH: 8.32 (Out of Range)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_05b81c2d4760394486c0e097b21d0706 = L.polyline(
+                [[24.340189, 92.122992], [24.392541, 92.157995]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_05b81c2d4760394486c0e097b21d0706.bindTooltip(
+                `<div>
+                     Segment 25 | Avg pH: 7.40 (Highly Acidic)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_03e3747e680efc1e7a4dd3c91498fbf4 = L.polyline(
+                [[29.930289, 78.137206], [29.947667, 78.161833]],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_03e3747e680efc1e7a4dd3c91498fbf4.bindTooltip(
+                `<div>
+                     Segment 26 | Avg pH: 8.33 (Out of Range)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_980f182a73655e111ac9ab74a8220d55 = L.polyline(
+                [[18.92178, 72.834732], [18.922538, 72.823514], [18.949037, 72.819111], [18.950337, 72.803241], [18.967313, 72.929655], [18.982292, 72.808923], [18.997883, 72.811319], [19.026945, 72.834925], [19.034286, 73.082422], [19.038979, 72.827674], [19.061371, 72.970377], [19.089151, 72.826028], [19.133791, 72.810349], [19.15042, 72.980893], [19.197132, 72.985993], [19.202275, 73.02209], [19.229456, 73.002085], [19.236012, 72.999586], [19.244118, 73.117187], [19.28193, 72.783267], [19.28702, 72.937644], [19.287397, 72.904918], [19.318553, 72.851316], [19.452095, 72.747609]],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_980f182a73655e111ac9ab74a8220d55.bindTooltip(
+                `<div>
+                     Segment 32 | Avg pH: 7.99 (Out of Range)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_dec573e3682e28348be11d0df9fe577b = L.polyline(
+                [[19.775596, 72.755901], [19.789433, 72.68845], [19.800635, 72.684874], [19.965659, 72.779863], [19.972691, 72.717154]],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00FF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_dec573e3682e28348be11d0df9fe577b.bindTooltip(
+                `<div>
+                     Segment 33 | Avg pH: 8.14 (Acceptable)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_13675f30da6ebb646f626c02673c7d2e = L.polyline(
+                [[17.579149, 73.426908], [17.579149, 73.426908]],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_13675f30da6ebb646f626c02673c7d2e.bindTooltip(
+                `<div>
+                     Segment 34 | Avg pH: 7.95 (Out of Range)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_5a22954db9fd4b5f4b46d4a707f2fb20 = L.polyline(
+                [[16.989085, 73.284499], [16.997318, 73.272523], [17.147195, 73.26473]],
+                {"bubblingMouseEvents": true, "color": "#00FF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00FF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_5a22954db9fd4b5f4b46d4a707f2fb20.bindTooltip(
+                `<div>
+                     Segment 35 | Avg pH: 8.03 (Acceptable)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_d2e903a41ca14a9d50814afb38f9edf8 = L.polyline(
+                [[20.289536, 86.649164], [20.297233, 86.711367]],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_d2e903a41ca14a9d50814afb38f9edf8.bindTooltip(
+                `<div>
+                     Segment 36 | Avg pH: 7.95 (Out of Range)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_217360a2d21f8234125f688cc8f50cd3 = L.polyline(
+                [[30.934096, 75.79425], [30.998154, 75.79065], [31.06944, 75.7816], [31.245564, 75.761199], [31.274476, 75.591422]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_5c693b93a7eb446661965ab1c3c5d195);
+        
+    
+            poly_line_217360a2d21f8234125f688cc8f50cd3.bindTooltip(
+                `<div>
+                     Segment 40 | Avg pH: 7.79 (Moderately Acidic)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>

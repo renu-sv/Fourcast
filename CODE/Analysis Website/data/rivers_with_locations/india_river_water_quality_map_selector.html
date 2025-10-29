@@ -1,0 +1,170 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>India River Water Quality Map</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
+            .header {
+                background-color: #f0f0f0;
+                padding: 10px;
+                text-align: center;
+            }
+            .content {
+                display: flex;
+                flex: 1;
+            }
+            nav {
+        background-color: rgba(2, 62, 138, 0.8);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+      }
+      nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+            .map-container {
+                flex: 1;
+                position: relative;
+            }
+            iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+            .selectors {
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            .parameter-selector {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .year-selector {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            select {
+                padding: 8px;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+                font-size: 16px;
+                margin-top: 5px;
+            }
+            .year-btn {
+                padding: 10px 15px;
+                background-color: #e0e0e0;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+            .year-btn:hover {
+                background-color: #d0d0d0;
+            }
+            .year-btn.active {
+                background-color: #0078D7;
+                color: white;
+            }
+            label {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>India River Water Quality Map</h1>
+            </div>
+            <nav>
+                <a href="/index.html">Home</a>
+                <a href="/data/rivers_with_locations/india_river_water_quality_map_selector.html">River</a>
+                <a href="/data/groundwater_with_locations/india_Ground_water_quality_map_selector.html">Ground Water</a>
+                <a href="/data/seas_with_locations/india_sea_water_quality_map_selector.html">Marine</a>
+              </nav>
+            <div class="selectors">
+                <div class="parameter-selector">
+                    <label for="parameter">Select Parameter:</label>
+                    <select id="parameter" onchange="changeParameter()">
+                        <option value="pH">pH</option>
+                        <option value="DO">Dissolved Oxygen (DO)</option>
+                        <option value="BOD">Biochemical Oxygen Demand (BOD)</option>
+                    </select>
+                </div>
+                <div class="year-selector">
+    <button class="year-btn active" onclick="changeYear(2012)">2012</button>
+<button class="year-btn " onclick="changeYear(2013)">2013</button>
+<button class="year-btn " onclick="changeYear(2014)">2014</button>
+<button class="year-btn " onclick="changeYear(2015)">2015</button>
+<button class="year-btn " onclick="changeYear(2016)">2016</button>
+<button class="year-btn " onclick="changeYear(2017)">2017</button>
+<button class="year-btn " onclick="changeYear(2018)">2018</button>
+<button class="year-btn " onclick="changeYear(2019)">2019</button>
+<button class="year-btn " onclick="changeYear(2020)">2020</button>
+<button class="year-btn " onclick="changeYear(2021)">2021</button>
+<button class="year-btn " onclick="changeYear(2022)">2022</button>
+<button class="year-btn " onclick="changeYear(2023)">2023</button>
+
+                </div>
+            </div>
+            <div class="content">
+                <div class="map-container">
+                    <iframe id="map-frame" src="maps/pH/india_river_ph_map_2012.html"></iframe>
+                </div>
+            </div>
+        </div>
+        <script>
+            let currentYear = 2012;
+            let currentParameter = 'pH';
+            
+            function updateMap() {
+                // Update iframe source based on current selections
+                const paramFolder = currentParameter;
+                const paramLower = currentParameter.toLowerCase();
+                document.getElementById('map-frame').src = `maps/${paramFolder}/india_river_${paramLower}_map_${currentYear}.html`;
+            }
+            
+            function changeParameter() {
+                currentParameter = document.getElementById('parameter').value;
+                updateMap();
+            }
+            
+            function changeYear(year) {
+                currentYear = year;
+                updateMap();
+                
+                // Update active button
+                const buttons = document.querySelectorAll('.year-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent == year) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+        </script>
+    </body>
+    </html>
+    

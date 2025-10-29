@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AQUA CHECK</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-image: url("image.png");
+        background-position: bottom;
+      }
+
+      header {
+        background-color: rgba(0, 119, 182, 0.8);
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      nav {
+        background-color: rgba(2, 62, 138, 0.8);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+      }
+      nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      main {
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+      .chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 450px; /* Increased from 350px */
+        background: #f0fcff;
+        border: 2px solid #86d3f4;
+        border-radius: 15px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        font-family: "Arial", sans-serif;
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bot-header {
+        background-color: #86d3f4;
+        color: white;
+        padding: 12px; /* Slightly increased padding */
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        text-align: center;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px; /* Increased font size */
+      }
+
+      .bot-header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .minimize-btn {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px; /* Increased font size */
+      }
+
+      .chatbox {
+        height: 350px; /* Increased from 250px */
+        overflow-y: auto;
+        padding: 15px; /* Increased padding */
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Increased gap */
+        scroll-behavior: smooth;
+      }
+
+      .bot-message,
+      .user-message {
+        padding: 10px 12px; /* Increased padding */
+        border-radius: 12px; /* Slightly larger radius */
+        max-width: 85%;
+        font-size: 15px; /* Increased font size */
+        line-height: 1.5; /* Increased line height */
+      }
+
+      .bot-message {
+        background: #d8f5ff;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background: #d0eaff;
+        align-self: flex-end;
+        text-align: right;
+      }
+
+      .input-container {
+        display: flex;
+        border-top: 1px solid #ccc;
+        padding: 12px; /* Increased padding */
+      }
+
+      .input-container input {
+        flex: 1;
+        padding: 10px 15px; /* Increased padding */
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin-right: 10px;
+        font-size: 15px; /* Increased font size */
+      }
+
+      .input-container button {
+        background-color: #86d3f4;
+        border: none;
+        color: white;
+        padding: 10px 18px; /* Increased padding */
+        cursor: pointer;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 15px; /* Increased font size */
+      }
+
+      .input-container button:hover {
+        background-color: #5ebde2;
+      }
+
+      .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; /* Increased gap */
+        padding: 8px 15px; /* Increased padding */
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .suggestion-btn {
+        background-color: #e0f7ff;
+        border: 1px solid #86d3f4;
+        border-radius: 15px;
+        padding: 6px 12px; /* Increased padding */
+        font-size: 13px; /* Increased font size */
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .suggestion-btn:hover {
+        background-color: #c0eeff;
+      }
+
+      .bot-typing {
+        align-self: flex-start;
+        background: #f0f0f0;
+        border-radius: 10px;
+        padding: 8px 14px; /* Increased padding */
+        font-size: 13px; /* Increased font size */
+        color: #555;
+        display: none;
+      }
+
+      /* Styling for table outputs */
+      .parameter-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        font-size: 13px; /* Increased font size */
+      }
+
+      .parameter-table th,
+      .parameter-table td {
+        border: 1px solid #ddd;
+        padding: 6px; /* Increased padding */
+        text-align: left;
+      }
+
+      .parameter-table th {
+        background-color: #86d3f4;
+        color: white;
+      }
+
+      .parameter-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .minimized {
+        height: auto;
+      }
+
+      .minimized .chatbox,
+      .minimized .input-container,
+      .minimized .suggestions {
+        display: none;
+      }
+
+      .health-indicator {
+        width: 12px; /* Increased size */
+        height: 12px; /* Increased size */
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+      }
+
+      .excellent {
+        background-color: #00cc44;
+      }
+      .good {
+        background-color: #88cc00;
+      }
+      .fair {
+        background-color: #ffcc00;
+      }
+      .poor {
+        background-color: #ff8800;
+      }
+      .critical {
+        background-color: #ff3300;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>AQUA CHECK</h1>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/data/rivers_with_locations/india_river_water_quality_map_selector.html">River</a>
+      <a href="/data/groundwater_with_locations/india_Ground_water_quality_map_selector.html">Ground Water</a>
+      <a href="/data/seas_with_locations/india_sea_water_quality_map_selector.html">Marine</a>
+    </nav>
+
+    <main>
+      <h2>Welcome to the Home Page</h2>
+      <p>
+        This is the landing page. Use the navigation above to explore different
+        water resources.
+      </p>
+    </main>
+
+    <div class="chatbot-container" id="chatbotContainer">
+      <div class="bot-header">
+        <div class="bot-header-title">🐢 TurtleBot - Water Quality Expert</div>
+        <button
+          class="minimize-btn"
+          id="toggleToneBtn"
+          title="Toggle Explanation Style"
+        >
+          🧠
+        </button>
+      </div>
+      <div class="chatbox" id="chatbox">
+        <div class="bot-message">
+          Hi there! I'm TurtleBot, your water quality expert! Ask me about water
+          parameters like pH, BOD, or water quality in general. 🌊
+        </div>
+      </div>
+      <div class="suggestions" id="suggestions">
+        <button class="suggestion-btn">What is water quality?</button>
+        <button class="suggestion-btn">Explain pH levels</button>
+        <button class="suggestion-btn">Common water pollutants</button>
+      </div>
+      <div class="input-container">
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Ask me about water quality..."
+        />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      // Expanded knowledge base
+      // Expanded knowledge base
+      const waterKnowledge = {
+        // Basic Parameters
+        parameters: {
+          ph: {
+            short:
+              "pH measures acidity or alkalinity on a scale of 0-14. 7 is neutral, lower is acidic, higher is alkaline.",
+            detailed:
+              "pH is a measure of how acidic or basic water is, ranging from 0-14. A pH of 7 is neutral, below 7 is acidic, and above 7 is alkaline (basic). Most aquatic organisms thrive in water with pH levels between 6.5-8.5. Acidic water can release toxic metals from pipes and sediments, while highly alkaline water can cause scaling and taste issues. pH is affected by geological factors, pollution, and biological activity.",
+            ranges: {
+              "0-4":
+                "Extremely acidic: Harmful to most life, may indicate acid mine drainage or industrial pollution",
+              "4-6":
+                "Acidic: Stressful for many aquatic organisms, common in some natural waters like bogs",
+              "6.5-8.5":
+                "Optimal range: Ideal for most aquatic life and drinking water",
+              "8.5-10":
+                "Alkaline: May indicate algal blooms or certain geological conditions",
+              "10-14":
+                "Extremely alkaline: Harmful to most life, may indicate industrial pollution",
+            },
+            standards:
+              "EPA drinking water standards recommend pH between 6.5-8.5",
+            emoji: "🧪",
+          },
+          bod: {
+            short:
+              "BOD (Biochemical Oxygen Demand) measures oxygen needed by microorganisms to decompose organic matter in water.",
+            detailed:
+              "Biochemical Oxygen Demand (BOD) measures how much dissolved oxygen microorganisms need to break down organic material in water. High BOD indicates high levels of organic pollution, typically from sewage, agricultural runoff, or industrial discharges. As microorganisms consume oxygen to break down these materials, less oxygen remains available for fish and other aquatic life, potentially leading to dead zones. BOD is a key indicator of water pollution and overall water quality.",
+            ranges: {
+              "1-2 mg/L": "Very clean water",
+              "3-5 mg/L": "Moderately clean",
+              "6-9 mg/L": "Somewhat polluted",
+              "10+ mg/L": "Very polluted water",
+            },
+            standards:
+              "Clean rivers typically have BOD below 2 mg/L. Values above 5 mg/L indicate pollution",
+            emoji: "🦠",
+          },
+          do: {
+            short:
+              "DO (Dissolved Oxygen) is the amount of oxygen in water, essential for aquatic life.",
+            detailed:
+              "Dissolved Oxygen (DO) refers to the level of free, non-compound oxygen present in water. It's essential for the respiration of aquatic organisms and the breakdown of organic materials. DO levels are affected by temperature (colder water holds more oxygen), atmospheric pressure, salinity, and biological activity. Low DO levels can lead to fish kills and ecosystem collapse. Fast-moving, turbulent water typically has higher DO than stagnant water due to greater atmospheric exchange.",
+            ranges: {
+              "0-2 mg/L":
+                "Severe hypoxia: Fish kills likely, anaerobic conditions",
+              "2-4 mg/L": "Hypoxic: Stressful for most aquatic life",
+              "4-7 mg/L": "Acceptable: Supports most aquatic life",
+              "7+ mg/L":
+                "Excellent: Fully oxygenated, ideal for most aquatic organisms",
+            },
+            standards:
+              "Most fish require at least 5-6 mg/L for good health. Cold water fisheries need higher levels (>7 mg/L)",
+            emoji: "🫧",
+          },
+          nitrate: {
+            short:
+              "Nitrates (NO₃) are nutrients that promote plant growth but high levels can cause water pollution.",
+            detailed:
+              "Nitrates (NO₃) are a form of nitrogen that serves as an essential nutrient for plant growth. While naturally present in water, excessive nitrate levels often result from agricultural fertilizers, animal waste, sewage, and industrial runoff. High nitrate concentrations can trigger algal blooms leading to eutrophication—a process where excessive plant growth depletes oxygen and creates dead zones. In drinking water, high nitrates can cause blue baby syndrome in infants by interfering with oxygen transport in the bloodstream.",
+            ranges: {
+              "0-1 mg/L": "Natural levels",
+              "1-10 mg/L": "Elevated, possible human impacts",
+              "10+ mg/L":
+                "High, unsafe for drinking water, ecological concerns",
+            },
+            standards:
+              "EPA maximum contaminant level for nitrate in drinking water is 10 mg/L",
+            emoji: "🌱",
+          },
+          coliform: {
+            short:
+              "Coliform bacteria indicate potential fecal contamination and presence of disease-causing organisms.",
+            detailed:
+              "Coliform bacteria are commonly found in soil, water, and the digestive systems of animals. While most coliform bacteria aren't harmful, their presence serves as an indicator that disease-causing organisms (pathogens) might be in the water. Fecal coliforms, especially E. coli, specifically indicate contamination from human or animal waste. Testing for these bacteria helps water quality professionals determine if water is safe for drinking, swimming, or other uses. Sources of contamination include sewage overflows, agricultural runoff, and faulty septic systems.",
+            ranges: {
+              "0 MPN/100mL": "Safe for drinking water",
+              "1-200 MPN/100mL":
+                "May be suitable for recreation but not drinking",
+              "200+ MPN/100mL": "Unsafe for human contact",
+            },
+            standards:
+              "Drinking water should have zero E. coli per 100mL. Recreational waters have varying standards by region",
+            emoji: "🦠",
+          },
+          conductivity: {
+            short:
+              "Conductivity measures water's ability to conduct electricity, indicating dissolved ion concentration.",
+            detailed:
+              "Conductivity measures water's ability to pass electrical current, which increases with the concentration of dissolved ions (salts, minerals, metals). Higher conductivity indicates more dissolved substances. While some dissolved minerals are beneficial, abnormally high conductivity may signal pollution from road salt, agricultural runoff, or industrial discharges. Conductivity also varies naturally based on geology, water temperature, and water source. It's measured in microsiemens per centimeter (μS/cm) or millisiemens per centimeter (mS/cm).",
+            ranges: {
+              "0-200 μS/cm":
+                "Very low conductivity, typical of pristine mountain streams",
+              "200-1000 μS/cm": "Normal range for most freshwater bodies",
+              "1000-10,000 μS/cm": "Brackish water or polluted freshwater",
+              "10,000+ μS/cm": "Saline water or highly polluted water",
+            },
+            standards:
+              "Freshwater streams typically range from 50-1500 μS/cm. Drinking water often below 1000 μS/cm",
+            emoji: "⚡",
+          },
+          turbidity: {
+            short:
+              "Turbidity measures water cloudiness due to suspended particles like silt, clay, and microorganisms.",
+            detailed:
+              "Turbidity measures the cloudiness or haziness of water caused by suspended particles that scatter light. These particles may include silt, clay, algae, organic matter, and microorganisms. High turbidity reduces light penetration needed for aquatic plants, can harbor pathogens, and may indicate erosion or pollution. Turbidity is measured in Nephelometric Turbidity Units (NTU) or Formazin Nephelometric Units (FNU). While some natural water bodies may be naturally turbid, sudden increases often indicate problems like erosion, stormwater runoff, or algal blooms.",
+            ranges: {
+              "0-1 NTU": "Very clear water, suitable for drinking",
+              "1-5 NTU": "Slightly cloudy, generally acceptable for recreation",
+              "5-50 NTU": "Cloudy water, may impact aquatic life",
+              "50+ NTU": "Very turbid, likely impairs ecosystem function",
+            },
+            standards:
+              "EPA recommends drinking water turbidity below 1 NTU, never exceeding 5 NTU",
+            emoji: "☁️",
+          },
+          tds: {
+            short:
+              "TDS (Total Dissolved Solids) measures all inorganic and organic substances dissolved in water.",
+            detailed:
+              "Total Dissolved Solids (TDS) measures the combined content of all inorganic and organic substances dissolved in water, including minerals, salts, metals, and some organic matter small enough to pass through a 2-micron filter. TDS affects water taste, hardness, and corrosivity. Sources include natural mineral springs, agricultural runoff, urban runoff, industrial wastewater, and salt from roads or water softeners. Very high or low TDS can affect aquatic organisms adapted to specific conditions, while extremely low TDS water (like distilled) can taste flat and may leach minerals from pipes.",
+            ranges: {
+              "0-50 mg/L": "Very low, like rainwater or distilled water",
+              "50-250 mg/L": "Excellent drinking water",
+              "250-500 mg/L": "Good drinking water, typical tap water",
+              "500-1000 mg/L": "Fair drinking water, may have noticeable taste",
+              "1000+ mg/L": "Poor for drinking, may be brackish",
+            },
+            standards:
+              "EPA secondary standard recommends TDS below 500 mg/L for drinking water",
+            emoji: "🧂",
+          },
+          temperature: {
+            short:
+              "Water temperature affects oxygen levels, chemical processes, and aquatic organism metabolism.",
+            detailed:
+              "Water temperature is a critical parameter affecting almost every aspect of water quality. It influences dissolved oxygen levels (colder water holds more oxygen), metabolic rates of aquatic organisms, toxicity of pollutants, and rates of biological and chemical processes. Temperature changes can result from weather patterns, shade removal, thermal pollution from industrial discharges, impoundments, and climate change. Sudden temperature changes (thermal shock) can be particularly harmful to aquatic life. Each aquatic species has an optimal temperature range for survival, growth, and reproduction.",
+            ranges: {
+              "0-4°C": "Very cold, limited biological activity",
+              "4-10°C": "Cold water, suitable for trout and salmon",
+              "10-20°C":
+                "Cool to moderate, suitable for many temperate species",
+              "20-30°C":
+                "Warm water, suitable for bass, catfish, many tropical species",
+              "30+°C": "Very warm, stressful for most aquatic life",
+            },
+            standards: "Standards vary by water body type and designated use",
+            emoji: "🌡️",
+          },
+          "heavy metals": {
+            short:
+              "Heavy metals in water include lead, mercury, and arsenic, which can be toxic even in small amounts.",
+            detailed:
+              "Heavy metals in water include elements like lead, mercury, cadmium, chromium, and arsenic. These contaminants can enter water through industrial discharges, mining activities, corroded pipes, agricultural runoff, and natural geological sources. Even at low concentrations, heavy metals can be toxic to humans and wildlife because they bioaccumulate in tissues over time. Health effects vary by metal but may include developmental delays, kidney damage, nervous system impairment, and increased cancer risk. Most heavy metals cannot be detected without specific testing as they don't change water's appearance, taste, or smell.",
+            ranges: {
+              Lead: "EPA action level: 0.015 mg/L",
+              Mercury: "EPA MCL: 0.002 mg/L",
+              Arsenic: "EPA MCL: 0.010 mg/L",
+              Cadmium: "EPA MCL: 0.005 mg/L",
+              Chromium: "EPA MCL: 0.1 mg/L",
+            },
+            standards:
+              "Each heavy metal has specific regulatory limits for drinking water",
+            emoji: "⚠️",
+          },
+        },
+
+        // Water Types & Ecosystems
+        waterTypes: {
+          "river water":
+            "Rivers are flowing freshwater systems that drain watersheds. Water quality is influenced by surrounding land use, point and non-point source pollution, and seasonal variations in flow. Common issues include agricultural runoff, urban pollutants, and thermal pollution.",
+
+          groundwater:
+            "Groundwater exists in underground aquifers and is typically filtered by soil and rock layers. It's generally less susceptible to bacterial contamination but more vulnerable to persistent chemical pollutants that can remain for decades. Natural minerals from surrounding rock formations significantly influence its chemistry.",
+
+          "marine water":
+            "Marine (ocean) water has high salt content (about 35,000 mg/L TDS) and unique chemical properties. Coastal marine waters face challenges from land-based pollution, while open ocean water quality concerns include microplastics, shipping pollution, and acidification from atmospheric CO2.",
+
+          "lake water":
+            "Lakes are standing water bodies with distinct thermal stratification in deeper systems. They're particularly vulnerable to nutrient pollution leading to eutrophication. Water quality varies with depth, season, and location within the lake.",
+
+          "drinking water":
+            "Drinking water standards are the most stringent of all water types. Treatment typically involves coagulation, flocculation, sedimentation, filtration, and disinfection. Standards address microbial safety, chemical contaminants, and aesthetic factors like taste and odor.",
+
+          wastewater:
+            "Wastewater contains used water from residential, commercial, and industrial sources. Treatment removes pollutants before discharge to the environment. Monitoring focuses on BOD, suspended solids, nutrients, and pathogens.",
+        },
+
+        // Water Quality Issues
+        waterIssues: {
+          eutrophication:
+            "Eutrophication occurs when excess nutrients (primarily nitrogen and phosphorus) enter water bodies, causing algal blooms. When these algae die and decompose, they deplete oxygen, creating dead zones where aquatic life cannot survive. Sources include fertilizer runoff, sewage, and certain detergents. Management includes nutrient reduction strategies and watershed protection.",
+
+          acidification:
+            "Water acidification is the lowering of pH, often caused by acid rain, mine drainage, or increased atmospheric CO2. It can release toxic metals from sediments, damage aquatic organisms' shells and skeletons, and disrupt reproductive cycles. Ocean acidification specifically threatens coral reefs and shellfish.",
+
+          microplastics:
+            "Microplastics are plastic particles smaller than 5mm that contaminate water from breakdown of larger plastics, microbeads in personal care products, and synthetic fabric fibers. They absorb toxins, enter the food chain, and have been found in drinking water worldwide. Research on human health impacts is ongoing.",
+
+          salinization:
+            "Salinization is increasing salt concentration in freshwater due to irrigation practices, road salt application, sea level rise, or natural geological factors. It threatens freshwater ecosystems, damages infrastructure, and reduces agricultural productivity.",
+
+          "thermal pollution":
+            "Thermal pollution is the release of heated water into natural water bodies, primarily from power plants and industrial cooling processes. Even small temperature increases can stress aquatic organisms, reduce dissolved oxygen, and disrupt spawning cycles.",
+
+          "algal blooms":
+            "Algal blooms are rapid increases in algae population, often appearing as green, red, or brown water discoloration. While some are natural, human activities often trigger harmful blooms. Certain blooms produce toxins dangerous to humans and wildlife. They're primarily caused by excess nutrients and favorable temperatures.",
+        },
+
+        // Treatment & Solutions
+        solutions: {
+          "water treatment":
+            "Water treatment processes remove contaminants to make water safe for drinking or return to the environment. For drinking water, this typically includes coagulation/flocculation to remove particles, filtration to remove smaller particles and some microorganisms, and disinfection (often with chlorine, UV light, or ozone) to kill pathogens. Advanced treatments may include activated carbon for chemicals and membrane filtration for smaller contaminants.",
+
+          "green infrastructure":
+            "Green infrastructure uses vegetation, soils, and natural processes to manage water, particularly in urban areas. Examples include rain gardens, bioswales, green roofs, and permeable pavements. These systems filter pollutants, reduce runoff volume, recharge groundwater, and provide habitat and aesthetic benefits.",
+
+          "wetland restoration":
+            "Wetlands naturally filter water, buffer floods, and provide habitat. Restoration involves re-establishing hydrology, native vegetation, and ecological functions of degraded wetlands. Constructed wetlands can also be created specifically for water treatment.",
+
+          "riparian buffers":
+            "Vegetated strips along waterways that filter pollutants from runoff, stabilize banks, provide shade to moderate water temperature, and create wildlife habitat. Effective buffers typically include multiple vegetation layers (trees, shrubs, and grasses).",
+
+          "water conservation":
+            "Practices to reduce water use, including efficient fixtures, leak detection, rainwater harvesting, landscaping with native plants, and reuse of greywater. Conservation reduces strain on water supplies and treatment facilities.",
+        },
+
+        // Water Quality Indices
+        indices: {
+          wqi: "The Water Quality Index (WQI) combines multiple water quality parameters into a single value between 0-100. Higher values indicate better quality. It simplifies complex data for public communication and trend monitoring. Different regions may use slightly different calculation methods.",
+
+          wwqi: {
+            description:
+              "The Weighted Water Quality Index assigns different importance to various parameters based on their significance to overall water health.",
+            ranges: {
+              "90-100":
+                "Excellent: Water quality is protected with a virtual absence of threats",
+              "70-90":
+                "Good: Water quality is protected with only a minor degree of threat",
+              "50-70":
+                "Fair: Water quality is usually protected but occasionally threatened",
+              "25-50":
+                "Marginal: Water quality is frequently threatened or impaired",
+              "0-25":
+                "Poor: Water quality is almost always threatened or impaired",
+            },
+          },
+
+          "trophic state": {
+            description:
+              "The Trophic State Index (TSI) measures nutrient enrichment (eutrophication) in lakes and reservoirs.",
+            ranges: {
+              "<30":
+                "Oligotrophic: Clear water, low nutrients, few plants/algae",
+              "30-50":
+                "Mesotrophic: Moderately clear water, increasing nutrients and plant growth",
+              "50-70":
+                "Eutrophic: Less clear water, excessive plant growth, algal blooms common",
+              ">70":
+                "Hypereutrophic: Murky water, dense algae and plant growth, frequent algal blooms",
+            },
+          },
+        },
+
+        // Regions & Special Topics
+        regions: {
+          india:
+            "India faces significant water quality challenges including industrial pollution, inadequate sewage treatment, agricultural runoff, and groundwater contamination. The Central Pollution Control Board monitors national water quality, with special focus on major rivers like the Ganges and Yamuna. The National Water Mission aims to improve water quality and efficiency.",
+
+          ganga:
+            "The Ganges (Ganga) River is culturally and ecologically significant but faces severe pollution from untreated sewage, industrial waste, and religious practices. The National Mission for Clean Ganga (Namami Gange) program works to address these issues through treatment plants, riverfront development, and public awareness.",
+
+          yamuna:
+            "The Yamuna River, especially in Delhi, is one of India's most polluted rivers. It receives large volumes of untreated sewage and industrial waste. Despite multiple action plans, water quality remains poor with high BOD, low DO, and fecal contamination.",
+
+          "coastal waters":
+            "India's coastal waters face pollution from urban sewage, industrial discharge, agricultural runoff, and plastic waste. The National Centre for Coastal Research monitors coastal water quality. Major concerns include heavy metals, persistent organic pollutants, and microplastics.",
+
+          "groundwater quality":
+            "India relies heavily on groundwater, but quality issues include fluoride, arsenic, nitrate, and salinity. Over-extraction has led to contamination in many regions. The Central Ground Water Board monitors quality and implements management strategies.",
+        },
+
+        // Fun Facts
+        funFacts: [
+          "The Amazon River contains about 20% of all river water on Earth! 🌊",
+          "Some deep ocean bacteria can survive without oxygen, instead using sulfur compounds for energy! 🦠",
+          "A single drop of water can contain millions of microorganisms! 💧",
+          "Water flowing over Niagara Falls has a self-cleaning effect, removing pollutants through aeration! 🌈",
+          "Jellyfish are about 95% water! 🪼",
+          "Antarctic ice contains air bubbles with atmospheric samples from over 800,000 years ago! ❄️",
+          "The deepest freshwater lake, Lake Baikal in Russia, contains about 20% of Earth's unfrozen freshwater! 🏞️",
+          "The Great Pacific Garbage Patch is actually mostly microplastics suspended throughout the water column! 🚮",
+          "Hippos secrete a natural sunscreen that is red-colored and prevents both sunburn and bacterial growth! 🦛",
+          "Many rivers in India are considered sacred and have been worshipped for thousands of years! 🙏",
+          "Some turtles can absorb oxygen through special membranes near their tail, allowing them to stay underwater for months during hibernation! 🐢",
+          "The average person in India uses about 135 liters of water per day, while Americans use around 375 liters! 💦",
+        ],
+
+        // Jokes
+        jokes: [
+          "Why don't scientists trust atoms? Because they make up everything, even water! 😂",
+          "What did one ocean say to the other ocean? Nothing, they just waved! 👋",
+          "How do you make holy water? You boil the hell out of it! 🔥",
+          "What's a marine biologist's favorite TV show? Coral's Anatomy! 🐠",
+          "Why don't fish play basketball? They're afraid of the net! 🏀",
+          "What happens when you throw sodium in water? Na, you don't want to know! 💥",
+          "What do you call a fish with no eyes? Fsh! 🐟",
+          "What did the water say to the boat? Nothing, it just waved! 🌊",
+          "Why did the pH go to therapy? It was too basic! 🧪",
+          "What's a polluted river's favorite candy? Toxic waste! ☢️",
+          "I was going to tell a chemistry joke about water, but all the good ones Argon! ⚗️",
+        ],
+      };
+
+      // Context awareness - improved with more detailed tracking
+      let conversationContext = {
+        currentTopic: null,
+        mentionedParams: [],
+        questionCount: 0,
+        userName: null,
+        recentTopics: [], // Track recent topics to improve suggestion relevance
+        lastResponseTime: null,
+        preferredLanguage: "technical", // "technical" or "simple"
+        engagementLevel: 0, // Track user engagement from 0-10
+      };
+
+      // Chat message history
+      let chatHistory = [];
+
+      // Function to scroll to bottom of chat - improved with smooth scrolling
+      function scrollToBottom() {
+        const chatbox = document.getElementById("chatbox");
+        chatbox.scrollTo({
+          top: chatbox.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+
+      // Function to show typing indicator with improved animation
+      function showTyping() {
+        const chatbox = document.getElementById("chatbox");
+
+        // Remove any existing typing indicators
+        const existingIndicator = document.getElementById("botTyping");
+        if (existingIndicator) {
+          existingIndicator.remove();
+        }
+
+        const typingDiv = document.createElement("div");
+        typingDiv.className = "bot-typing";
+        typingDiv.id = "botTyping";
+        typingDiv.innerHTML =
+          "TurtleBot is typing<span class='typing-dots'>...</span>";
+        chatbox.appendChild(typingDiv);
+
+        // Animate the dots
+        let dots = 0;
+        const typingDotsElement = typingDiv.querySelector(".typing-dots");
+        const typingAnimation = setInterval(() => {
+          dots = (dots + 1) % 4;
+          typingDotsElement.textContent = ".".repeat(dots || 3);
+        }, 500);
+
+        // Store the interval ID for later cleanup
+        typingDiv.dataset.animationId = typingAnimation;
+
+        scrollToBottom();
+      }
+
+      // Function to hide typing indicator with proper cleanup
+      function hideTyping() {
+        const typingDiv = document.getElementById("botTyping");
+        if (typingDiv) {
+          // Clear the animation interval
+          if (typingDiv.dataset.animationId) {
+            clearInterval(parseInt(typingDiv.dataset.animationId));
+          }
+
+          // Add a fade-out effect
+          typingDiv.style.opacity = "0";
+          setTimeout(() => {
+            if (typingDiv && typingDiv.parentNode) {
+              typingDiv.remove();
+            }
+          }, 300);
+        }
+      }
+      function attachSuggestionListeners() {
+        document.querySelectorAll(".suggestion-btn").forEach((btn) => {
+          if (!btn.dataset.listenerAdded) {
+            btn.addEventListener("click", function () {
+              document.getElementById("userInput").value = this.textContent;
+              sendMessage();
+            });
+            btn.dataset.listenerAdded = "true"; // flag to avoid rebinding
+          }
+        });
+      }
+
+      // Improved function to detect parameter mentions with partial matching
+      function detectParameters(text) {
+        const lowerText = text.toLowerCase();
+        const params = Object.keys(waterKnowledge.parameters);
+
+        // Direct match
+        const exact = params.filter((param) => lowerText.includes(param));
+        if (exact.length) return exact;
+
+        // Enhanced synonym handling
+        const paramSynonyms = {
+          ph: ["acid", "alkaline", "basic", "acidic"],
+          do: ["oxygen", "o2", "dissolved oxygen"],
+          bod: ["biochemical", "biological oxygen"],
+          nitrate: ["nitrogen", "nutrient", "no3"],
+          coliform: ["bacteria", "e.coli", "fecal", "bacterial"],
+          turbidity: ["cloudy", "clarity", "muddy", "clear"],
+          tds: ["dissolved solid", "salt", "mineral content"],
+          conductivity: ["electric", "conductance", "ion", "ec"],
+          "heavy metals": [
+            "lead",
+            "mercury",
+            "arsenic",
+            "cadmium",
+            "chromium",
+            "metal",
+          ],
+        };
+
+        let matches = [];
+
+        for (const [key, synonyms] of Object.entries(paramSynonyms)) {
+          if (synonyms.some((word) => lowerText.includes(word))) {
+            matches.push(key);
+          }
+        }
+
+        return matches;
+      }
+
+      // Enhanced topic detection with more categories and context awareness
+      function detectTopic(text) {
+        const lowerText = text.toLowerCase();
+
+        // Check for parameter mentions first
+        if (
+          Object.keys(waterKnowledge.parameters).some((param) =>
+            lowerText.includes(param)
+          )
+        ) {
+          return "parameters";
+        }
+
+        // Check for regional mentions
+        if (
+          lowerText.includes("india") ||
+          lowerText.includes("ganga") ||
+          lowerText.includes("yamuna") ||
+          lowerText.includes("delhi") ||
+          lowerText.includes("mumbai") ||
+          lowerText.includes("indian")
+        ) {
+          return "india";
+        }
+
+        // Check for pollution mentions
+        if (
+          lowerText.includes("pollution") ||
+          lowerText.includes("contamination") ||
+          lowerText.includes("pollutant") ||
+          lowerText.includes("waste") ||
+          lowerText.includes("sewage") ||
+          lowerText.includes("toxic")
+        ) {
+          return "pollution";
+        }
+
+        // Check for treatment mentions
+        if (
+          lowerText.includes("treatment") ||
+          lowerText.includes("clean") ||
+          lowerText.includes("purify") ||
+          lowerText.includes("filter") ||
+          lowerText.includes("solution") ||
+          lowerText.includes("purification")
+        ) {
+          return "treatment";
+        }
+
+        // Check for conservation mentions
+        if (
+          lowerText.includes("conservation") ||
+          lowerText.includes("save") ||
+          lowerText.includes("preserve") ||
+          lowerText.includes("protect") ||
+          lowerText.includes("sustainable") ||
+          lowerText.includes("reuse")
+        ) {
+          return "conservation";
+        }
+
+        // Check for water body types
+        if (
+          lowerText.includes("river") ||
+          lowerText.includes("lake") ||
+          lowerText.includes("ocean") ||
+          lowerText.includes("groundwater") ||
+          lowerText.includes("drinking") ||
+          lowerText.includes("tap water")
+        ) {
+          return "water types";
+        }
+
+        // Check for health mentions
+        if (
+          lowerText.includes("health") ||
+          lowerText.includes("disease") ||
+          lowerText.includes("safe") ||
+          lowerText.includes("drink") ||
+          lowerText.includes("illness") ||
+          lowerText.includes("safety")
+        ) {
+          return "health";
+        }
+
+        return null;
+      }
+
+      // Function to get detailed parameter info - improved with better formatting
+
+      // Function to get detailed parameter info
+      function getParameterTable(param) {
+        if (!waterKnowledge.parameters[param]) return "";
+
+        const info = waterKnowledge.parameters[param];
+        let tableHTML = `<table class="parameter-table">
+          <tr><th colspan="2">${param.toUpperCase()} ${info.emoji}</th></tr>`;
+
+        if (info.ranges) {
+          tableHTML += `<tr><td colspan="2"><strong>Typical Ranges:</strong></td></tr>`;
+          for (const [range, desc] of Object.entries(info.ranges)) {
+            tableHTML += `<tr><td>${range}</td><td>${desc}</td></tr>`;
+          }
+        }
+
+        if (info.standards) {
+          tableHTML += `<tr><td colspan="2"><strong>Standards:</strong> ${info.standards}</td></tr>`;
+        }
+
+        tableHTML += `</table>`;
+        return tableHTML;
+      }
+
+      // Function to get water quality index explanation
+      function getWQIExplanation(value) {
+        let category, color, explanation;
+
+        if (value >= 90) {
+          category = "Excellent";
+          color = "excellent";
+          explanation =
+            "Water quality is protected with a virtual absence of threats or impairment.";
+        } else if (value >= 70) {
+          category = "Good";
+          color = "good";
+          explanation =
+            "Water quality is protected with only a minor degree of threat or impairment.";
+        } else if (value >= 50) {
+          category = "Fair";
+          color = "fair";
+          explanation =
+            "Water quality is usually protected but occasionally threatened or impaired.";
+        } else if (value >= 25) {
+          category = "Marginal";
+          color = "poor";
+          explanation = "Water quality is frequently threatened or impaired.";
+        } else {
+          category = "Poor";
+          color = "critical";
+          explanation =
+            "Water quality is almost always threatened or impaired.";
+        }
+
+        return `<p><span class="health-indicator ${color}"></span> <strong>${category} (${value})</strong>: ${explanation}</p>`;
+      }
+
+      // Function to generate a bot response
+      function generateResponse(userMessage) {
+        const lowerMsg = userMessage.toLowerCase();
+        if (lowerMsg === "reset" || lowerMsg === "clear chat") {
+          chatHistory = [];
+          conversationContext = {
+            currentTopic: null,
+            mentionedParams: [],
+            questionCount: 0,
+            recentTopics: [],
+            lastResponseTime: null,
+            preferredLanguage: "technical",
+            engagementLevel: 0,
+          };
+          return "Chat has been reset. Ready for a fresh start! 💬";
+        }
+        const mentionedParams = detectParameters(lowerMsg);
+        if (mentionedParams.length > 0) {
+          conversationContext.mentionedParams = [
+            ...new Set([
+              ...conversationContext.mentionedParams,
+              ...mentionedParams,
+            ]),
+          ];
+        }
+        if (
+          mentionedParams.length &&
+          mentionedParams.some((p) => !waterKnowledge.parameters[p])
+        ) {
+          return "One or more topics you asked about don’t match known parameters. 🐢 Try asking about pH, DO, BOD, or another known water quality parameter.";
+        }
+        if (mentionedParams.length === 1) {
+          const param = mentionedParams[0];
+          const paramInfo = waterKnowledge.parameters[param];
+          const explanation =
+            conversationContext.preferredLanguage === "simple"
+              ? paramInfo.short
+              : paramInfo.detailed;
+          return `${
+            paramInfo.emoji
+          } <strong>${param.toUpperCase()}</strong>: ${explanation}${getParameterTable(
+            param
+          )}`;
+        }
+
+        // Extract mentioned parameters
+
+        // Detect topic
+        const detectedTopic = detectTopic(lowerMsg);
+        if (detectedTopic) {
+          conversationContext.currentTopic = detectedTopic;
+        }
+
+        // Handle greetings
+        if (/^(hi|hello|hey|greetings)/i.test(lowerMsg)) {
+          return "Hello there! 👋 I'm TurtleBot, your water quality expert! How can I help you today? You can ask me about water parameters, pollution issues, or water quality in general.";
+        }
+
+        // Handle name inquiries
+        if (/who are you|your name|about you/i.test(lowerMsg)) {
+          return "I'm TurtleBot! 🐢 I'm specialized in water quality topics. I can explain parameters like pH, BOD, DO, help you understand water pollution issues, and share information about water treatment and conservation. What would you like to know about water quality?";
+        }
+
+        // Handle thanks
+        if (/thank|thanks/i.test(lowerMsg)) {
+          return "You're welcome! 🐢 Happy to help with your water quality questions. Is there anything else about water you'd like to know?";
+        }
+        if (mentionedParams.length > 1) {
+          const validParams = mentionedParams.filter(
+            (p) => waterKnowledge.parameters[p]
+          );
+          if (validParams.length === 0) {
+            return "Sorry, I couldn't recognize any valid water quality parameters. 🐢";
+          }
+
+          return validParams
+            .map((p) => {
+              const info = waterKnowledge.parameters[p];
+              return `${info.emoji} <strong>${p.toUpperCase()}</strong>: ${
+                info.short
+              }<br><br>`;
+            })
+            .join("");
+        }
+
+        // Handle specific parameter inquiries
+        for (const param in waterKnowledge.parameters) {
+          if (lowerMsg.includes(param)) {
+            const paramInfo = waterKnowledge.parameters[param];
+            return `${
+              paramInfo.emoji
+            } <strong>${param.toUpperCase()}</strong>: ${
+              paramInfo.detailed
+            }${getParameterTable(param)}`;
+          }
+        }
+
+        // Handle water type inquiries
+        for (const type in waterKnowledge.waterTypes) {
+          if (lowerMsg.includes(type)) {
+            return `<strong>${
+              type.charAt(0).toUpperCase() + type.slice(1)
+            }:</strong> ${waterKnowledge.waterTypes[type]}`;
+          }
+        }
+
+        // Handle water issue inquiries
+        for (const issue in waterKnowledge.waterIssues) {
+          if (lowerMsg.includes(issue)) {
+            return `<strong>${
+              issue.charAt(0).toUpperCase() + issue.slice(1)
+            }:</strong> ${waterKnowledge.waterIssues[issue]}`;
+          }
+        }
+
+        // Handle solution inquiries
+        for (const solution in waterKnowledge.solutions) {
+          if (lowerMsg.includes(solution)) {
+            return `<strong>${
+              solution.charAt(0).toUpperCase() + solution.slice(1)
+            }:</strong> ${waterKnowledge.solutions[solution]}`;
+          }
+        }
+
+        // Handle region inquiries
+        for (const region in waterKnowledge.regions) {
+          if (lowerMsg.includes(region)) {
+            return `<strong>Water Quality in ${
+              region.charAt(0).toUpperCase() + region.slice(1)
+            }:</strong> ${waterKnowledge.regions[region]}`;
+          }
+        }
+
+        // Handle water quality index inquiries
+        if (
+          lowerMsg.includes("wqi") ||
+          lowerMsg.includes("index") ||
+          lowerMsg.includes("water quality index")
+        ) {
+          const wqiInfo = waterKnowledge.indices.wwqi;
+          let response = `<strong>Water Quality Index (WQI):</strong> ${waterKnowledge.indices.wqi}<br><br>`;
+          response += "<strong>WQI Classifications:</strong><br>";
+
+          for (const [range, desc] of Object.entries(wqiInfo.ranges)) {
+            const [min, max] = range.split("-");
+            const midpoint = (parseInt(min) + parseInt(max)) / 2;
+            response += getWQIExplanation(midpoint);
+          }
+
+          return response;
+        }
+
+        // Handle comparison requests
+        if (
+          lowerMsg.includes("compare") ||
+          lowerMsg.includes("difference between")
+        ) {
+          const params = Object.keys(waterKnowledge.parameters);
+          const mentionedInQuery = params.filter((p) => lowerMsg.includes(p));
+
+          if (mentionedInQuery.length >= 2) {
+            const [param1, param2] = mentionedInQuery;
+            return `<strong>Comparing ${param1.toUpperCase()} and ${param2.toUpperCase()}:</strong><br><br>
+            <strong>${param1.toUpperCase()}:</strong> ${
+              waterKnowledge.parameters[param1].short
+            }<br><br>
+            <strong>${param2.toUpperCase()}:</strong> ${
+              waterKnowledge.parameters[param2].short
+            }<br><br>
+            Both parameters are important for assessing water quality but measure different aspects of water condition.`;
+          }
+        }
+
+        // Handle water quality general inquiries
+        if (
+          lowerMsg.includes("water quality") ||
+          lowerMsg.includes("quality of water")
+        ) {
+          return "Water quality refers to the chemical, physical, and biological characteristics of water. It's a measure of how suitable water is for a particular purpose, such as drinking, recreation, or supporting aquatic life. Key parameters include pH, dissolved oxygen, turbidity, nutrients, and contaminants. Good water quality supports healthy ecosystems and human uses, while poor water quality can harm both. What specific aspect of water quality would you like to know more about?";
+        }
+
+        // Handle pollution inquiries
+        if (
+          lowerMsg.includes("pollution") ||
+          lowerMsg.includes("pollutant") ||
+          lowerMsg.includes("contamination")
+        ) {
+          return "Water pollution occurs when harmful substances contaminate water bodies, degrading water quality and making it toxic for humans and the environment. Major sources include:<br><br>1️⃣ <strong>Industrial discharge</strong>: Chemicals, heavy metals, and heat<br>2️⃣ <strong>Agricultural runoff</strong>: Fertilizers, pesticides, and animal waste<br>3️⃣ <strong>Sewage</strong>: Human waste and household chemicals<br>4️⃣ <strong>Urban runoff</strong>: Oil, trash, and road salts<br>5️⃣ <strong>Plastic waste</strong>: Microplastics that persist in the environment<br><br>Would you like to know more about a specific type of pollution?";
+        }
+
+        // Handle fun fact requests
+        if (
+          lowerMsg.includes("fun fact") ||
+          lowerMsg.includes("interesting fact")
+        ) {
+          const randomFact =
+            waterKnowledge.funFacts[
+              Math.floor(Math.random() * waterKnowledge.funFacts.length)
+            ];
+          return `<strong>Water Fun Fact:</strong> ${randomFact}`;
+        }
+
+        // Handle joke requests
+        if (lowerMsg.includes("joke") || lowerMsg.includes("funny")) {
+          const randomJoke =
+            waterKnowledge.jokes[
+              Math.floor(Math.random() * waterKnowledge.jokes.length)
+            ];
+          return `<strong>Here's a water joke:</strong> ${randomJoke}`;
+        }
+
+        // Handle safe drinking water inquiries
+        if (
+          (lowerMsg.includes("safe") || lowerMsg.includes("drink")) &&
+          lowerMsg.includes("water")
+        ) {
+          return "Safe drinking water should be free from harmful contaminants and meet these key quality parameters:<br><br>✅ <strong>Microbiological</strong>: No E. coli or fecal coliforms<br>✅ <strong>Chemical</strong>: Safe levels of nitrates, heavy metals, pesticides<br>✅ <strong>Physical</strong>: Clear, odorless, with acceptable pH (6.5-8.5)<br><br>In India, the Bureau of Indian Standards (BIS) sets drinking water specifications under IS 10500. Always ensure water is properly treated before drinking, especially if from an uncertain source.";
+        }
+
+        // Handle treatment inquiries
+        if (
+          lowerMsg.includes("treatment") ||
+          lowerMsg.includes("clean") ||
+          lowerMsg.includes("purify")
+        ) {
+          return "Water treatment processes remove contaminants to make water safe. The main steps include:<br><br>1️⃣ <strong>Coagulation & Flocculation</strong>: Chemicals are added to form larger particles<br>2️⃣ <strong>Sedimentation</strong>: Heavier particles settle to the bottom<br>3️⃣ <strong>Filtration</strong>: Water passes through filters to remove smaller particles<br>4️⃣ <strong>Disinfection</strong>: Chlorine, UV light, or ozone kills microorganisms<br><br>Home water treatment options include boiling, filtering, chlorination, and UV purifiers. The best method depends on what contaminants you need to remove.";
+        }
+
+        // Handle conservation inquiries
+        if (
+          lowerMsg.includes("conservation") ||
+          lowerMsg.includes("save water") ||
+          lowerMsg.includes("reduce usage")
+        ) {
+          return "Water conservation is crucial, especially in water-stressed regions. Simple ways to conserve water include:<br><br>💧 Fix leaking taps (can waste 3,000+ liters annually)<br>💧 Install low-flow fixtures (can reduce usage by 30-50%)<br>💧 Collect rainwater for gardens and outdoor uses<br>💧 Reuse greywater from baths/washing for toilets/gardens<br>💧 Choose water-efficient appliances<br>💧 Water plants during cooler hours to reduce evaporation<br><br>In India, water conservation is particularly important due to seasonal water availability and growing population demands.";
+        }
+
+        // Handle general water facts
+        if (
+          (lowerMsg.includes("fact") || lowerMsg.includes("tell me about")) &&
+          lowerMsg.includes("water")
+        ) {
+          return "🌊 <strong>Water Facts:</strong><br><br>• Water covers about 71% of Earth's surface<br>• Only 2.5% of Earth's water is freshwater<br>• Of all freshwater, 68.7% is locked in ice and glaciers<br>• The average person in India uses about 135 liters of water daily<br>• A person can survive about a week without water<br>• Water has a unique property of expanding when it freezes<br>• At room temperature, water molecules are moving at about 600 meters per second!";
+        }
+
+        // Default response if nothing specific is matched
+        return `
+      I'm not quite sure about that topic. 🐢 Maybe try one of these questions:<br><br>
+      • What is pH?<br>
+      • How is drinking water treated?<br>
+      • Tell me about water pollution<br>
+      • What is WQI?<br><br>
+      You can also click one of the suggestions below! 💧
+      `;
+      }
+
+      // Function to send message
+      function sendMessage() {
+        const input = document.getElementById("userInput");
+        const chatbox = document.getElementById("chatbox");
+
+        const userMsg = input.value.trim();
+        if (!userMsg || userMsg.length < 2) {
+          const msg = document.createElement("div");
+          msg.className = "bot-message";
+          msg.innerText = "Can you please ask a more detailed question? 🐢";
+          chatbox.appendChild(msg);
+          input.value = "";
+          return;
+        }
+
+        // Show user message
+        const userDiv = document.createElement("div");
+        userDiv.className = "user-message";
+        userDiv.innerText = userMsg;
+        chatbox.appendChild(userDiv);
+
+        // Add to conversation history
+        chatHistory.push({ role: "user", message: userMsg });
+
+        // Clear input and show typing indicator
+        input.value = "";
+        showTyping();
+        scrollToBottom();
+
+        // Generate response with delay for natural feeling
+        setTimeout(() => {
+          hideTyping();
+
+          // Increment question counter
+          conversationContext.questionCount++;
+          if (userMsg.length > 50 || userMsg.includes("?")) {
+            conversationContext.engagementLevel = Math.min(
+              conversationContext.engagementLevel + 1,
+              10
+            );
+          } else {
+            conversationContext.engagementLevel = Math.max(
+              conversationContext.engagementLevel - 1,
+              0
+            );
+          }
+
+          // Generate bot response
+          const botResponse = generateResponse(userMsg);
+
+          // Show bot message
+          const botDiv = document.createElement("div");
+          botDiv.className = "bot-message";
+          botDiv.innerHTML = botResponse;
+          chatbox.appendChild(botDiv);
+
+          // Add to conversation history
+          chatHistory.push({ role: "bot", message: botResponse });
+
+          // Update suggestions based on new context
+          updateSuggestions();
+
+          scrollToBottom();
+        }, 800);
+      }
+
+      // Function to handle key press
+      function handleKey(event) {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      }
+
+      // Function to toggle minimize
+      document
+        .getElementById("toggleToneBtn")
+        .addEventListener("click", function () {
+          const container = document.getElementById("chatbotContainer");
+          container.classList.toggle("minimized");
+
+          this.textContent = container.classList.contains("minimized")
+            ? "+"
+            : "🧠";
+        });
+
+      // Initialize suggestions
+      window.onload = function () {
+        document.getElementById("toggleToneBtn").onclick = () => {
+          const mode =
+            conversationContext.preferredLanguage === "technical"
+              ? "simple"
+              : "technical";
+          conversationContext.preferredLanguage = mode;
+          alert(`Switched to ${mode} mode!`);
+        };
+
+        // ✅ Add this below the toggle button logic
+        document
+          .getElementById("userInput")
+          .addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+              event.preventDefault(); // prevent form from submitting twice
+              sendMessage();
+            }
+          });
+
+        // ✅ Add this too, to bind the send button
+        document
+          .querySelector(".input-container button")
+          .addEventListener("click", sendMessage);
+
+        updateSuggestions();
+        attachSuggestionListeners();
+      };
+      function updateSuggestions() {
+        const suggestionsDiv = document.getElementById("suggestions");
+        suggestionsDiv.innerHTML = "";
+
+        const validSuggestions = [
+          "What is pH?",
+          "Explain BOD",
+          "What are coliform bacteria?",
+          "What is turbidity?",
+          "What causes water pollution?",
+          "What is WQI?",
+          "Tell me a fun fact about water",
+          "Give me a water joke",
+          "How is drinking water treated?",
+          "What is groundwater?",
+          "Tell me about heavy metals in water",
+        ];
+
+        validSuggestions.forEach((suggestion) => {
+          const response = generateResponse(suggestion);
+          if (!response.includes("I'm not quite sure")) {
+            const btn = document.createElement("button");
+            btn.className = "suggestion-btn";
+            btn.textContent = suggestion;
+            suggestionsDiv.appendChild(btn);
+          }
+        });
+
+        attachSuggestionListeners();
+      }
+    </script>
+  </body>
+</html>

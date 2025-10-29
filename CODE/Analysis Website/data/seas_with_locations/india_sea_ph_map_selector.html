@@ -1,0 +1,52 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>India Water Body pH Map</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 0; }
+            .header { text-align: center; padding: 10px; background: #f0f0f0; }
+            .year-selector { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 15px; }
+            .year-btn { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; background: #e0e0e0; }
+            .year-btn:hover { background: #d0d0d0; }
+            .year-btn.active { background: #0078D7; color: white; }
+            iframe { width: 100%; height: 90vh; border: none; }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h2>India Sea,Canal,Marine Water pH Map</h2>
+        </div>
+        <nav>
+            <a href="/index.html">Home</a>
+            <a href="/data/rivers_with_locations/india_river_water_quality_map_selector.html">River</a>
+            <a href="/data/groundwater_with_locations/india_Ground_water_quality_map_selector.html">Ground Water</a>
+            <a href="/data/seas_with_locations/india_sea_water_quality_map_selector.html">Marine</a>
+          </nav>
+        <div class="year-selector">
+    <button class="year-btn active" onclick="changeYear(2012)">2012</button>
+<button class="year-btn" onclick="changeYear(2013)">2013</button>
+<button class="year-btn" onclick="changeYear(2014)">2014</button>
+<button class="year-btn" onclick="changeYear(2015)">2015</button>
+<button class="year-btn" onclick="changeYear(2016)">2016</button>
+<button class="year-btn" onclick="changeYear(2017)">2017</button>
+<button class="year-btn" onclick="changeYear(2018)">2018</button>
+<button class="year-btn" onclick="changeYear(2019)">2019</button>
+<button class="year-btn" onclick="changeYear(2020)">2020</button>
+<button class="year-btn" onclick="changeYear(2021)">2021</button>
+<button class="year-btn" onclick="changeYear(2022)">2022</button>
+<button class="year-btn" onclick="changeYear(2023)">2023</button>
+
+        </div>
+        <iframe id="map-frame" src="maps/india_sea_ph_map_2012.html"></iframe>
+        <script>
+            function changeYear(year) {
+                document.getElementById('map-frame').src = `maps/india_sea_ph_map_${year}.html`;
+                document.querySelectorAll('.year-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.textContent == year);
+                });
+            }
+        </script>
+    </body>
+    </html>
+    

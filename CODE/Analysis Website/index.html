@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AQUA CHECK</title>
+    <link rel="stylesheet" href="/path/to/your/styles.css">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-image: url("image.png");
+        background-position: bottom;
+      }
+
+      header {
+        background-color: rgba(0, 119, 182, 0.8);
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      nav {
+        background-color: rgba(2, 62, 138, 0.8);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+      }
+      nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      main {
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+      .chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 450px; /* Increased from 350px */
+        background: #f0fcff;
+        border: 2px solid #86d3f4;
+        border-radius: 15px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        font-family: "Arial", sans-serif;
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bot-header {
+        background-color: #86d3f4;
+        color: white;
+        padding: 12px; /* Slightly increased padding */
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        text-align: center;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px; /* Increased font size */
+      }
+
+      .bot-header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .minimize-btn {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px; /* Increased font size */
+      }
+
+      .chatbox {
+        height: 350px; /* Increased from 250px */
+        overflow-y: auto;
+        padding: 15px; /* Increased padding */
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Increased gap */
+        scroll-behavior: smooth;
+      }
+
+      .bot-message,
+      .user-message {
+        padding: 10px 12px; /* Increased padding */
+        border-radius: 12px; /* Slightly larger radius */
+        max-width: 85%;
+        font-size: 15px; /* Increased font size */
+        line-height: 1.5; /* Increased line height */
+      }
+
+      .bot-message {
+        background: #d8f5ff;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background: #d0eaff;
+        align-self: flex-end;
+        text-align: right;
+      }
+
+      .input-container {
+        display: flex;
+        border-top: 1px solid #ccc;
+        padding: 12px; /* Increased padding */
+      }
+
+      .input-container input {
+        flex: 1;
+        padding: 10px 15px; /* Increased padding */
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin-right: 10px;
+        font-size: 15px; /* Increased font size */
+      }
+
+      .input-container button {
+        background-color: #86d3f4;
+        border: none;
+        color: white;
+        padding: 10px 18px; /* Increased padding */
+        cursor: pointer;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 15px; /* Increased font size */
+      }
+
+      .input-container button:hover {
+        background-color: #5ebde2;
+      }
+
+      .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; /* Increased gap */
+        padding: 8px 15px; /* Increased padding */
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .suggestion-btn {
+        background-color: #e0f7ff;
+        border: 1px solid #86d3f4;
+        border-radius: 15px;
+        padding: 6px 12px; /* Increased padding */
+        font-size: 13px; /* Increased font size */
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .suggestion-btn:hover {
+        background-color: #c0eeff;
+      }
+
+      .bot-typing {
+        align-self: flex-start;
+        background: #f0f0f0;
+        border-radius: 10px;
+        padding: 8px 14px; /* Increased padding */
+        font-size: 13px; /* Increased font size */
+        color: #555;
+        display: none;
+      }
+
+      /* Styling for table outputs */
+      .parameter-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        font-size: 13px; /* Increased font size */
+      }
+
+      .parameter-table th,
+      .parameter-table td {
+        border: 1px solid #ddd;
+        padding: 6px; /* Increased padding */
+        text-align: left;
+      }
+
+      .parameter-table th {
+        background-color: #86d3f4;
+        color: white;
+      }
+
+      .parameter-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .minimized {
+        height: auto;
+      }
+
+      .minimized .chatbox,
+      .minimized .input-container,
+      .minimized .suggestions {
+        display: none;
+      }
+
+      .health-indicator {
+        width: 12px; /* Increased size */
+        height: 12px; /* Increased size */
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+      }
+
+      .excellent {
+        background-color: #00cc44;
+      }
+      .good {
+        background-color: #88cc00;
+      }
+      .fair {
+        background-color: #ffcc00;
+      }
+      .poor {
+        background-color: #ff8800;
+      }
+      .critical {
+        background-color: #ff3300;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>AQUA CHECK</h1>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/data/rivers_with_locations/india_river_water_quality_map_selector.html">River</a>
+      <a href="/data/groundwater_with_locations/india_Ground_water_quality_map_selector.html">Ground Water</a>
+      <a href="/data/seas_with_locations/india_sea_water_quality_map_selector.html">Marine</a>
+    </nav>
+
+    <main>
+      <h2>Welcome to the Home Page</h2>
+      <p>
+        This is the landing page. Use the navigation above to explore different
+        water resources.
+      </p>
+    </main>
+
+    <div class="chatbot-container" id="chatbotContainer">
+      <div class="bot-header">
+        <div class="bot-header-title">🐢 TurtleBot - Water Quality Expert</div>
+        <button
+          class="minimize-btn"
+          id="toggleToneBtn"
+          title="Toggle Explanation Style"
+        >
+          🧠
+        </button>
+      </div>
+      <div class="chatbox" id="chatbox">
+        <div class="bot-message">
+          Hi there! I'm TurtleBot, your water quality expert! Ask me about water
+          parameters like pH, BOD, or water quality in general. 🌊
+        </div>
+      </div>
+      <div class="input-container">
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Ask me about water quality..."
+        />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <img src="/path/to/image.png" alt="Background">
+    <script src="/path/to/your/script.js"></script>
+    <script>
+        // Function to scroll to the bottom of chat
+        function scrollToBottom() {
+          const chatbox = document.getElementById("chatbox");
+          chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: "smooth" });
+        }
+      
+        // Typing animation
+        function showTyping() {
+          const chatbox = document.getElementById("chatbox");
+          const typingDiv = document.createElement("div");
+          typingDiv.className = "bot-typing";
+          typingDiv.id = "botTyping";
+          typingDiv.innerHTML = "TurtleBot is typing...";
+          chatbox.appendChild(typingDiv);
+          scrollToBottom();
+        }
+      
+        function hideTyping() {
+          const typingDiv = document.getElementById("botTyping");
+          if (typingDiv) typingDiv.remove();
+        }
+      
+        // Get response from GPT backend
+        async function generateResponse(userMessage) {
+          try {
+            const res = await fetch("http://localhost:3001/ask", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ message: userMessage }),
+            });
+            const data = await res.json();
+            return data.reply || "Sorry, I didn't understand that. 🐢";
+          } catch (error) {
+            console.error("Error:", error);
+            return "Oops! Something went wrong. 🐢";
+          }
+        }
+      
+        // Send user message
+        async function sendMessage() {
+          const input = document.getElementById("userInput");
+          const chatbox = document.getElementById("chatbox");
+          const userMsg = input.value.trim();
+          if (!userMsg) return;
+      
+          // Show user message
+          const userDiv = document.createElement("div");
+          userDiv.className = "user-message";
+          userDiv.innerText = userMsg;
+          chatbox.appendChild(userDiv);
+          input.value = "";
+      
+          // Bot is typing...
+          showTyping();
+          scrollToBottom();
+      
+          // Get AI reply
+          const botReply = await generateResponse(userMsg);
+          hideTyping();
+      
+          const botDiv = document.createElement("div");
+          botDiv.className = "bot-message";
+          botDiv.innerHTML = botReply;
+          chatbox.appendChild(botDiv);
+          scrollToBottom();
+        }
+      
+       
+      
+        // Initialize on load
+        window.onload = function () {
+          document.getElementById("userInput").addEventListener("keydown", (e) => {
+            if (e.key === "Enter") sendMessage();
+          });
+          document.querySelector(".input-container button").addEventListener("click", sendMessage);
+        };
+      </script>
+      <div id="navbar"></div>
+      <script>
+        fetch('/navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          })
+          .catch(error => console.error('Error loading navbar:', error));
+      </script>
+  </body>
+</html>

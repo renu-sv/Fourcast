@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Quality Station Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            padding: 10px;
+        }
+
+        #container {
+            display: flex;
+            height: 90vh;
+        }
+
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+
+        #output {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-left: 2px solid #ddd;
+        }
+
+        .station-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>📍 Click on the map to find the nearest station</h2>
+    <div id="container">
+        <div id="map"></div>
+        <div id="output">
+            <p>Click on the map to see nearest station details here.</p>
+            <div id="loading" style="display: none;">Loading WQI data...</div>
+            <div id="plot-container"></div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- MarkerCluster JS -->
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+    <script>
+        const map = L.map('map').setView([20.5937, 78.9629], 5); // Center: India
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        function showStationInfo(station) {
+    const output = document.getElementById("output");
+    output.innerHTML = `
+        <div class="station-info">
+            <h3>📡 Nearest Station</h3>
+            <p><strong>Code:</strong> ${station.station_code}</p>
+            <p><strong>Latitude:</strong> ${station.latitude}</p>
+            <p><strong>Longitude:</strong> ${station.longitude}</p>
+            <p><strong>Distance:</strong> ${station.distance_km} km</p>
+        </div>
+        <div id="loading" style="display: none;">Loading WQI data...</div>
+        <div id="plot-container"></div>
+    `;
+    
+    // If plot data is available in the response, display it
+    if (station.plot_data) {
+        const plotContainer = document.getElementById('plot-container');
+        plotContainer.innerHTML = `<img src="data:image/png;base64,${station.plot_data}" alt="WQI Plot">`;
+    }
+}
+
+map.on('click', function(e) {
+    const { lat, lng } = e.latlng;
+
+    fetch('/get_nearest_station', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ lat: lat, lon: lng })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        L.marker([data.latitude, data.longitude])
+            .addTo(map)
+            .bindPopup(`Nearest Station: ${data.station_code}`)
+            .openPopup();
+
+        showStationInfo(data);
+    })
+    .catch(err => {
+        console.error("Error:", err);
+        alert("Something went wrong!");
+    });
+});
+        // Helper: Generate distinct color for each category
+    const getColor = (function () {
+        const colors = [
+            "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
+            "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe",
+            "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000",
+            "#aaffc3", "#808000", "#ffd8b1", "#000075", "#808080"
+        ];
+        let index = 0;
+        const map = {};
+        return function (type) {
+            if (!map[type]) {
+                map[type] = colors[index % colors.length];
+                index++;
+            }
+            return map[type];
+        };
+    })();
+
+    // Load and mark all stations with clustering and unique color
+    fetch('/get_all_stations')
+        .then(response => response.json())
+        .then(data => {
+            const markers = L.markerClusterGroup();
+
+            data.forEach(station => {
+                const color = getColor(station.Wbodytype || 'Unknown');
+                const marker = L.circleMarker([station.latitude, station.longitude], {
+                    radius: 4,
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 0.8
+                }).bindPopup(`
+                    <strong>Station Code:</strong> ${station.station_code}<br>
+                    <strong>Type:</strong> ${station.Wbodytype || 'Unknown'}<br>
+                    <button onclick="getStationWQI('${station.station_code}')">Get WQI</button>
+                `);
+
+                markers.addLayer(marker);
+            });
+
+            map.addLayer(markers);
+        })
+        .catch(error => {
+            console.error('Error loading stations:', error);
+        });
+        function getStationWQI(stationCode) {
+    // Get references to elements (make sure they exist first)
+    const loadingEl = document.getElementById('loading');
+    const plotContainerEl = document.getElementById('plot-container');
+    
+    if (!loadingEl || !plotContainerEl) {
+        console.error('Loading or plot container elements not found');
+        return;
+    }
+    
+    // Show loading indicator
+    loadingEl.style.display = 'block';
+    plotContainerEl.innerHTML = '';
+    
+    fetch(`/get_station_wqi/${stationCode}`)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Failed to get WQI data');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Hide loading indicator
+            loadingEl.style.display = 'none';
+            
+            // Display WQI plot
+            if (data.plot_data) {
+                plotContainerEl.innerHTML = `<img src="data:image/png;base64,${data.plot_data}" alt="WQI Plot">`;
+            }
+        })
+        .catch(error => {
+            // Hide loading indicator
+            loadingEl.style.display = 'none';
+            
+            // Show error message
+            plotContainerEl.innerHTML = `<p class="error">${error.message || 'Error loading WQI data'}</p>`;
+        });
+}
+    </script>
+</body>
+</html>
